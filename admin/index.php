@@ -38,29 +38,67 @@ if ($authed) {
         if (!CPANEL_API_TOKEN || !CPANEL_USER) {
             return ['status' => 0, 'error' => 'cPanel API token not configured in config.php'];
         }
-        $query  = http_build_query(array_merge(['repository_root' => CPANEL_REPO_ROOT], $params));
-        $url    = 'https://' . CPANEL_HOST . ':' . CPANEL_PORT . '/execute/' . $module . '/' . $func . '?' . $query;
-        $ctx    = stream_context_create(['http' => [
-            'method'  => 'GET',
-            'header'  => "Authorization: cpanel " . CPANEL_USER . ":" . CPANEL_API_TOKEN . "\r\n",
-            'timeout' => 30,
+        // cPanel requires trailing slash on repository_root
+        $root  = rtrim(CPANEL_REPO_ROOT, '/') . '/';
+        $query = http_build_query(array_merge(['repository_root' => $root], $params));
+        $url   = 'https://' . CPANEL_HOST . ':' . CPANEL_PORT . '/execute/' . $module . '/' . $func . '?' . $query;
+        $ctx   = stream_context_create(['http' => [
+            'method'        => 'GET',
+            'header'        => "Authorization: cpanel " . CPANEL_USER . ":" . CPANEL_API_TOKEN . "\r\n",
+            'timeout'       => 15,
             'ignore_errors' => true,
         ], 'ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]);
         $resp = @file_get_contents($url, false, $ctx);
-        return $resp ? (json_decode($resp, true) ?? ['status' => 0, 'error' => 'Invalid JSON']) : ['status' => 0, 'error' => 'No response from cPanel'];
+        return $resp ? (json_decode($resp, true) ?? ['status' => 0, 'error' => 'Invalid JSON']) : ['status' => 0, 'error' => 'No response from cPanel API'];
     }
 
-    // One-click deploy: pull from GitHub then deploy
+    // ── Check if exec() is usable ─────────────────────────
+    function can_exec(): bool {
+        if (!function_exists('exec')) return false;
+        $disabled = array_map('trim', explode(',', (string)ini_get('disable_functions')));
+        return !in_array('exec', $disabled);
+    }
+
+    // One-click deploy: try direct git, fall back to cPanel UAPI
     if (isset($_POST['cpanel_deploy'])) {
-        $pull = cpanel_api('VersionControl', 'update');
-        if (($pull['status'] ?? 0) !== 1) {
-            $_SESSION['flash'] = ['type'=>'err', 'msg' => "✗ Pull failed: " . ($pull['errors'][0] ?? $pull['error'] ?? json_encode($pull))];
-        } else {
-            $deploy = cpanel_api('VersionControlDeployment', 'create');
-            $_SESSION['flash'] = ['type'=>'ok', 'msg' => ($deploy['status'] ?? 0) === 1
-                ? "✓ Pulled from GitHub and deployed successfully!"
-                : "✓ Pulled from GitHub. Deploy is running — refresh in 10 seconds to confirm."];
+        $repo   = CPANEL_REPO_ROOT;
+        $backup = '/home/pagezy/pagezy_config_backup.php';
+        $ok     = false;
+        $msg    = '';
+
+        // Method 1: direct git via exec() — bypasses "uncommitted changes" cPanel restriction
+        if (can_exec()) {
+            $out = []; $ret = 0;
+            exec('git -C ' . escapeshellarg($repo) . ' fetch origin main 2>&1', $out, $ret);
+            if ($ret === 0) {
+                $out2 = []; $ret2 = 0;
+                exec('git -C ' . escapeshellarg($repo) . ' reset --hard origin/main 2>&1', $out2, $ret2);
+                if ($ret2 === 0) {
+                    if (file_exists($backup)) @copy($backup, $repo . '/config.php');
+                    $ok  = true;
+                    $msg = "✓ Deployed successfully via git! " . trim(end($out2));
+                } else {
+                    $msg = "✗ git reset failed: " . implode(' ', $out2);
+                }
+            } else {
+                $msg = "✗ git fetch failed: " . implode(' ', $out);
+            }
         }
+
+        // Method 2: cPanel UAPI (fallback when exec not available)
+        if (!$ok) {
+            $pull = cpanel_api('VersionControl', 'update');
+            if (($pull['status'] ?? 0) === 1) {
+                if (file_exists($backup)) @copy($backup, $repo . '/config.php');
+                $ok  = true;
+                $msg = "✓ Pulled from GitHub and deployed successfully!";
+            } else {
+                $errDetail = $pull['errors'][0] ?? $pull['error'] ?? json_encode($pull);
+                $msg = ($msg ? $msg . "\n" : '') . "✗ cPanel API also failed: " . $errDetail;
+            }
+        }
+
+        $_SESSION['flash'] = ['type' => $ok ? 'ok' : 'err', 'msg' => $msg];
         header('Location: ?tab=deploy'); exit;
     }
 
