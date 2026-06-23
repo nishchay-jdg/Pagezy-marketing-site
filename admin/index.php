@@ -67,15 +67,28 @@ if ($authed) {
         $ok     = false;
         $msg    = '';
 
-        // Method 1: direct git via exec() — bypasses "uncommitted changes" cPanel restriction
-        // Use "cd && git" instead of "git -C" for compatibility with older git versions
+        // Method 1: direct git via exec()
+        // Builds an authenticated HTTPS URL using GITHUB_TOKEN so no SSH key or stored credential needed
         if (can_exec()) {
-            $out = []; $ret = 0;
             $safeRepo = escapeshellarg($repo);
-            exec('cd ' . $safeRepo . ' && git fetch origin main 2>&1', $out, $ret);
+            $token    = defined('GITHUB_TOKEN') ? GITHUB_TOKEN : '';
+            $ghRepo   = defined('GITHUB_MARKETING_REPO') ? GITHUB_MARKETING_REPO : '';
+
+            // Prefer token-authenticated URL; fall back to stored origin
+            if ($token && $ghRepo) {
+                $fetchUrl = escapeshellarg('https://' . $token . '@github.com/' . $ghRepo . '.git');
+                $fetchCmd = 'cd ' . $safeRepo . ' && git fetch ' . $fetchUrl . ' main 2>&1';
+                $resetCmd = 'cd ' . $safeRepo . ' && git reset --hard FETCH_HEAD 2>&1';
+            } else {
+                $fetchCmd = 'cd ' . $safeRepo . ' && git fetch origin main 2>&1';
+                $resetCmd = 'cd ' . $safeRepo . ' && git reset --hard origin/main 2>&1';
+            }
+
+            $out = []; $ret = 0;
+            exec($fetchCmd, $out, $ret);
             if ($ret === 0) {
                 $out2 = []; $ret2 = 0;
-                exec('cd ' . $safeRepo . ' && git reset --hard origin/main 2>&1', $out2, $ret2);
+                exec($resetCmd, $out2, $ret2);
                 if ($ret2 === 0) {
                     if (file_exists($backup)) @copy($backup, $repo . '/config.php');
                     $ok  = true;
@@ -86,24 +99,24 @@ if ($authed) {
             } else {
                 $msg = "✗ git fetch failed: " . implode(' ', $out);
             }
+        } else {
+            $msg = "✗ exec() is disabled on this server — using cPanel API instead.";
         }
 
-        // Method 2: cPanel UAPI (fallback when exec not available)
+        // Method 2: cPanel UAPI fallback
         if (!$ok) {
-            // Try with trailing slash (required by some cPanel versions)
-            $pull = cpanel_api('VersionControl', 'update');
-            if (($pull['status'] ?? 0) !== 1) {
-                // Also try without trailing slash
-                $pull2 = cpanel_api('VersionControl', 'update', ['_no_slash' => true]);
-            }
-            $pull = (($pull['status'] ?? 0) === 1) ? $pull : ($pull2 ?? $pull);
+            $pull  = cpanel_api('VersionControl', 'update');
+            $pull2 = (($pull['status'] ?? 0) !== 1) ? cpanel_api('VersionControl', 'update', ['_no_slash' => true]) : null;
+            $pull  = (($pull['status'] ?? 0) === 1) ? $pull : ($pull2 ?? $pull);
             if (($pull['status'] ?? 0) === 1) {
                 if (file_exists($backup)) @copy($backup, $repo . '/config.php');
                 $ok  = true;
                 $msg = "✓ Pulled from GitHub and deployed successfully!";
             } else {
                 $errDetail = $pull['errors'][0] ?? $pull['error'] ?? json_encode($pull);
-                $msg = ($msg ? $msg . "\n" : '') . "✗ cPanel API also failed: " . $errDetail;
+                $msg .= "\n✗ cPanel API also failed: " . $errDetail;
+                $msg .= "\n→ exec() available: " . (can_exec() ? 'yes' : 'no');
+                $msg .= "\n→ GITHUB_TOKEN set: " . ($token ? 'yes' : 'no');
             }
         }
 
