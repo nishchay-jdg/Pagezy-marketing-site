@@ -23,45 +23,84 @@ $authed = !empty($_SESSION['pagezy_admin']);
 $actionMsg = '';
 if ($authed) {
 
-    // Git pull
-    if (isset($_POST['git_pull'])) {
-        $dir = realpath(__DIR__ . '/..');
-        $out = shell_exec("cd " . escapeshellarg($dir) . " && git pull 2>&1");
-        $actionMsg = $out ?: 'No output from git pull.';
+    // ── cPanel UAPI helper ────────────────────────────────
+    function cpanel_api(string $module, string $func, array $params = []): array {
+        if (!CPANEL_API_TOKEN || !CPANEL_USER) {
+            return ['status' => 0, 'error' => 'cPanel API token not configured in config.php'];
+        }
+        $query  = http_build_query(array_merge(['repository_root' => CPANEL_REPO_ROOT], $params));
+        $url    = 'https://' . CPANEL_HOST . ':' . CPANEL_PORT . '/execute/' . $module . '/' . $func . '?' . $query;
+        $ctx    = stream_context_create(['http' => [
+            'method'  => 'GET',
+            'header'  => "Authorization: cpanel " . CPANEL_USER . ":" . CPANEL_API_TOKEN . "\r\n",
+            'timeout' => 30,
+            'ignore_errors' => true,
+        ], 'ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]);
+        $resp = @file_get_contents($url, false, $ctx);
+        return $resp ? (json_decode($resp, true) ?? ['status' => 0, 'error' => 'Invalid JSON']) : ['status' => 0, 'error' => 'No response from cPanel'];
+    }
+
+    // One-click deploy: pull from GitHub then deploy
+    if (isset($_POST['cpanel_deploy'])) {
+        // Step 1: Update from remote (git pull)
+        $pull = cpanel_api('VersionControl', 'update');
+        if (($pull['status'] ?? 0) !== 1) {
+            $actionMsg = "✗ Pull failed: " . ($pull['errors'][0] ?? $pull['error'] ?? json_encode($pull));
+        } else {
+            // Step 2: Deploy HEAD commit
+            $deploy = cpanel_api('VersionControlDeployment', 'create');
+            if (($deploy['status'] ?? 0) === 1) {
+                $actionMsg = "✓ Pulled from GitHub and deployed successfully!";
+            } else {
+                $actionMsg = "✓ Pulled from GitHub. Deploy queued — check cPanel Git Version Control for status.\n" . ($deploy['errors'][0] ?? '');
+            }
+        }
     }
 
     // Fetch latest CMS release from GitHub
     if (isset($_POST['fetch_release'])) {
-        $api = 'https://api.github.com/repos/' . GITHUB_CMS_REPO . '/releases/latest';
-        $ctx = stream_context_create(['http' => [
-            'header' => "User-Agent: Pagezy-Admin/1.0\r\nAccept: application/vnd.github.v3+json\r\n",
-            'timeout' => 10,
-        ]]);
-        $json = @file_get_contents($api, false, $ctx);
-        if ($json) {
-            $data = json_decode($json, true);
-            $tag  = $data['tag_name'] ?? 'unknown';
-            // Prefer uploaded zip asset, fall back to zipball
-            $url  = $data['zipball_url'] ?? '';
+        $headers = "User-Agent: Pagezy-Admin/1.0\r\nAccept: application/vnd.github.v3+json\r\n";
+        if (GITHUB_TOKEN) $headers .= "Authorization: Bearer " . GITHUB_TOKEN . "\r\n";
+        $ctx = stream_context_create(['http' => ['header' => $headers, 'timeout' => 10]]);
+
+        // Try latest release first
+        $json = @file_get_contents('https://api.github.com/repos/' . GITHUB_CMS_REPO . '/releases/latest', false, $ctx);
+        $data = $json ? json_decode($json, true) : null;
+
+        if (!empty($data['tag_name'])) {
+            // Has a formal release
+            $tag = $data['tag_name'];
+            $url = $data['zipball_url'] ?? '';
             foreach ($data['assets'] ?? [] as $asset) {
-                if (str_ends_with($asset['name'], '.zip')) {
-                    $url = $asset['browser_download_url'];
-                    break;
-                }
+                if (str_ends_with($asset['name'], '.zip')) { $url = $asset['browser_download_url']; break; }
             }
-            $cache = [
-                'tag'          => $tag,
-                'name'         => $data['name'] ?? $tag,
-                'download_url' => $url,
-                'body'         => $data['body'] ?? '',
-                'published_at' => $data['published_at'] ?? '',
-                'fetched_at'   => date('c'),
-            ];
-            file_put_contents(RELEASE_CACHE, json_encode($cache, JSON_PRETTY_PRINT));
-            $actionMsg = "✓ Release cache updated — " . $tag;
+            $name = $data['name'] ?? $tag;
+            $body = $data['body'] ?? '';
+            $published = $data['published_at'] ?? '';
         } else {
-            $actionMsg = "✗ Could not reach GitHub API. Check server internet access.";
+            // No release — fall back to latest commit on main branch
+            $branchJson = @file_get_contents('https://api.github.com/repos/' . GITHUB_CMS_REPO . '/branches/main', false, $ctx);
+            $branch = $branchJson ? json_decode($branchJson, true) : null;
+            $sha  = $branch['commit']['sha'] ?? 'main';
+            $short = substr($sha, 0, 7);
+            $tag  = 'main@' . $short;
+            $name = 'Latest build — ' . $short;
+            $url  = 'https://github.com/' . GITHUB_CMS_REPO . '/archive/refs/heads/main.zip';
+            $body = 'No formal release yet — serving latest main branch.';
+            $published = $branch['commit']['commit']['author']['date'] ?? date('c');
         }
+
+        $cache = [
+            'tag'          => $tag,
+            'name'         => $name,
+            'download_url' => $url,
+            'body'         => $body,
+            'published_at' => $published,
+            'fetched_at'   => date('c'),
+        ];
+        if (!is_dir(dirname(RELEASE_CACHE))) mkdir(dirname(RELEASE_CACHE), 0755, true);
+        file_put_contents(RELEASE_CACHE, json_encode($cache, JSON_PRETTY_PRINT));
+        $actionMsg = "✓ Download link updated — " . $tag;
     }
 
     // Delete a lead
@@ -496,12 +535,47 @@ td a:hover { text-decoration: underline; }
 
     <?php
     // ── Deploy ───────────────────────────────────────────
-    elseif ($tab === 'deploy'): ?>
+    elseif ($tab === 'deploy'):
+        $tokenSet = defined('CPANEL_API_TOKEN') && CPANEL_API_TOKEN !== '';
+    ?>
 
         <div class="page-title">Deploy</div>
-        <div class="page-sub">Auto-deploy via GitHub Actions → FTP, or manually via cPanel Git Version Control.</div>
+        <div class="page-sub">Pull latest code from GitHub and go live — directly from this panel.</div>
 
-        <!-- Method 1: GitHub Actions (primary) -->
+        <!-- One-click deploy -->
+        <div class="card" style="border-color:<?= $tokenSet ? 'rgba(99,102,241,.3)' : 'rgba(245,158,11,.3)' ?>;">
+            <div class="card-title">
+                One-Click Deploy
+                <?= $tokenSet ? '<span class="badge badge-green">Ready</span>' : '<span class="badge badge-yellow">Setup required</span>' ?>
+            </div>
+            <?php if ($tokenSet): ?>
+                <p style="color:var(--muted);font-size:13px;margin-bottom:20px;">Pulls the latest code from GitHub (<code style="background:rgba(255,255,255,.07);padding:1px 6px;border-radius:5px;"><?= GITHUB_MARKETING_REPO ?></code>) and deploys it to <code style="background:rgba(255,255,255,.07);padding:1px 6px;border-radius:5px;"><?= CPANEL_REPO_ROOT ?></code> — same as clicking "Update from Remote" + "Deploy HEAD Commit" in cPanel.</p>
+                <form method="POST">
+                    <button name="cpanel_deploy" value="1" class="btn btn-primary" style="font-size:15px;padding:12px 28px;">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        Pull &amp; Deploy Now
+                    </button>
+                </form>
+            <?php else: ?>
+                <p style="color:var(--muted);font-size:13px;margin-bottom:16px;">Add your cPanel API token to <code style="background:rgba(255,255,255,.07);padding:1px 6px;border-radius:5px;">config.php</code> to enable one-click deploy.</p>
+                <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px;">
+                    <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">How to get your cPanel API token</div>
+                    <?php foreach ([
+                        'Log in to <strong>cPanel</strong> → <strong>Security</strong> → <strong>Manage API Tokens</strong>',
+                        'Click <strong>Create API Token</strong> → give it a name (e.g. <code style="background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;">pagezy-admin</code>) → no expiry',
+                        'Copy the token → open <code style="background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;">config.php</code> on the server → paste it into <code style="background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;">CPANEL_API_TOKEN</code>',
+                    ] as $i => $s): ?>
+                    <div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:var(--muted);">
+                        <span style="width:22px;height:22px;border-radius:50%;background:rgba(99,102,241,.2);color:#818CF8;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><?= $i+1 ?></span>
+                        <span><?= $s ?></span>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <a href="https://cpanel.<?= str_replace(['https://','http://'], '', SITE_URL) ?>/security/manage-api-tokens" target="_blank" class="btn btn-outline">Open cPanel API Tokens ↗</a>
+            <?php endif; ?>
+        </div>
+
+        <!-- Fallback: GitHub Actions (primary) -->
         <div class="card">
             <div class="card-title">
                 Method 1 — GitHub Actions FTP Deploy <span class="badge badge-green">Recommended</span>

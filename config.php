@@ -74,9 +74,18 @@ define('ADMIN_PASSWORD', 'pagezy@admin2024');
 // GitHub repos
 define('GITHUB_CMS_REPO',        'nishchay-jdg/Pagezy');
 define('GITHUB_MARKETING_REPO',  'nishchay-jdg/Pagezy-marketing-site');
+define('GITHUB_TOKEN',           '');  // Optional: personal access token for higher rate limits
 
 // Release cache file (auto-written by admin panel)
 define('RELEASE_CACHE',  __DIR__ . '/downloads/release-cache.json');
+
+// cPanel UAPI — used by admin panel to trigger git pull + deploy without terminal
+// Generate token: cPanel → Security → Manage API Tokens → Create
+define('CPANEL_HOST',       'cpanel.pagezy.io');
+define('CPANEL_PORT',       2083);
+define('CPANEL_USER',       'pagezy');
+define('CPANEL_API_TOKEN',  '');  // Paste your cPanel API token here
+define('CPANEL_REPO_ROOT',  '/home/pagezy/public_html');
 
 // Leads admin password — change this before going live
 define('LEADS_PASSWORD', 'pagezy@leads2024');
