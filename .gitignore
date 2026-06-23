@@ -1,4 +1,5 @@
-# Server config
+# Server config — never commit real credentials
+config.php
 config.local.php
 .env
 
