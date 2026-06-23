@@ -592,10 +592,65 @@ td a:hover { text-decoration: underline; }
     // ── Deploy ───────────────────────────────────────────
     elseif ($tab === 'deploy'):
         $tokenSet = defined('CPANEL_API_TOKEN') && CPANEL_API_TOKEN !== '';
+
+        // System health checks
+        $dbOk = false; $dbMsg = '';
+        try { db()->query('SELECT 1'); $dbOk = true; $dbMsg = 'Connected to ' . DB_NAME; }
+        catch (Throwable $e) { $dbMsg = $e->getMessage(); }
+
+        $dlCount = 0; $enqCount = 0;
+        if ($dbOk) {
+            try { $dlCount  = (int) db()->query("SELECT COUNT(*) FROM pagezy_downloads")->fetchColumn(); } catch(Throwable $e) {}
+            try { $enqCount = (int) db()->query("SELECT COUNT(*) FROM pagezy_contacts")->fetchColumn(); } catch(Throwable $e) {}
+        }
+
+        $smtpConfigured = defined('SMTP_HOST') && SMTP_HOST !== '' && SMTP_USER !== '';
+        $smtpInfo = SMTP_USER . ' via ' . SMTP_HOST . ':' . SMTP_PORT;
+
+        // Handle test email
+        $testEmailResult = '';
+        if (isset($_POST['test_email'])) {
+            try {
+                Mailer::send(NOTIFY_TO, 'Pagezy SMTP Test', '<p style="font-family:sans-serif;">SMTP is working correctly from <strong>' . SMTP_USER . '</strong>.</p>');
+                $testEmailResult = 'ok';
+            } catch (Throwable $e) {
+                $testEmailResult = $e->getMessage();
+            }
+        }
     ?>
 
         <div class="page-title">Deploy</div>
         <div class="page-sub">Pull latest code from GitHub and go live — directly from this panel.</div>
+
+        <!-- System Status -->
+        <div class="card" style="border-color:<?= ($dbOk && $smtpConfigured) ? 'rgba(52,211,153,.25)' : 'rgba(245,158,11,.3)' ?>;">
+            <div class="card-title">System Status</div>
+            <div class="info-row">
+                <span class="label">Database</span>
+                <span class="val" style="color:<?= $dbOk ? '#34D399' : '#F87171' ?>;">
+                    <?= $dbOk ? '✓ ' : '✗ ' ?><?= h($dbMsg) ?>
+                    <?php if ($dbOk): ?> &nbsp;·&nbsp; <?= $dlCount ?> download leads &nbsp;·&nbsp; <?= $enqCount ?> enquiries<?php endif; ?>
+                </span>
+            </div>
+            <div class="info-row">
+                <span class="label">Email (SMTP)</span>
+                <span class="val" style="color:<?= $smtpConfigured ? '#34D399' : '#F87171' ?>;">
+                    <?= $smtpConfigured ? '✓ ' : '✗ Not configured' ?><?= $smtpConfigured ? h($smtpInfo) : '' ?>
+                </span>
+            </div>
+            <?php if ($testEmailResult === 'ok'): ?>
+            <div style="background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);border-radius:8px;padding:10px 14px;font-size:13px;color:#34D399;margin-top:12px;">
+                ✓ Test email sent to <?= h(NOTIFY_TO) ?> — check your inbox.
+            </div>
+            <?php elseif ($testEmailResult): ?>
+            <div style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);border-radius:8px;padding:10px 14px;font-size:13px;color:#F87171;margin-top:12px;">
+                ✗ SMTP error: <?= h($testEmailResult) ?>
+            </div>
+            <?php endif; ?>
+            <form method="POST" style="margin-top:14px;">
+                <button name="test_email" value="1" class="btn btn-outline btn-sm">Send test email → <?= h(NOTIFY_TO) ?></button>
+            </form>
+        </div>
 
         <!-- One-click deploy -->
         <div class="card" style="border-color:<?= $tokenSet ? 'rgba(99,102,241,.3)' : 'rgba(245,158,11,.3)' ?>;">

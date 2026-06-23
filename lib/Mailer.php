@@ -1,7 +1,8 @@
 <?php
 /**
  * Minimal SMTP mailer — no Composer, works on cPanel / shared hosting.
- * Supports Gmail SMTP with STARTTLS on port 587.
+ * Port 465 → implicit SSL (connect via ssl://)
+ * Port 587 → STARTTLS (plain TCP then upgrade)
  */
 class Mailer {
 
@@ -11,7 +12,6 @@ class Mailer {
             $line = fgets($sock, 512);
             if ($line === false) break;
             $data .= $line;
-            // Multi-line responses have a dash at position 3; space means last line
             if (isset($line[3]) && $line[3] === ' ') break;
         }
         return $data;
@@ -26,13 +26,6 @@ class Mailer {
         return $resp;
     }
 
-    /**
-     * Send an HTML email via SMTP.
-     *
-     * @param string $to      Recipient address
-     * @param string $subject Email subject
-     * @param string $html    HTML body
-     */
     public static function send(string $to, string $subject, string $html): void {
         $host     = SMTP_HOST;
         $port     = (int) SMTP_PORT;
@@ -41,8 +34,16 @@ class Mailer {
         $from     = SMTP_FROM;
         $fromName = SMTP_FROM_NAME;
 
-        // Open plain TCP connection first (STARTTLS upgrades it)
-        $sock = @fsockopen("tcp://{$host}", $port, $errno, $errstr, 15);
+        $useSSL = ($port === 465);
+
+        // Port 465: implicit SSL — connect directly over ssl://
+        // Port 587: plain TCP then STARTTLS upgrade
+        $proto = $useSSL ? 'ssl' : 'tcp';
+        $ctx   = stream_context_create(['ssl' => [
+            'verify_peer'       => false,
+            'verify_peer_name'  => false,
+        ]]);
+        $sock = @stream_socket_client("{$proto}://{$host}:{$port}", $errno, $errstr, 15, STREAM_CLIENT_CONNECT, $ctx);
         if (!$sock) {
             throw new RuntimeException("Cannot connect to SMTP {$host}:{$port} — {$errstr} ({$errno})");
         }
@@ -51,15 +52,16 @@ class Mailer {
         self::read($sock); // greeting
 
         self::cmd($sock, 'EHLO ' . (gethostname() ?: 'localhost'), '250');
-        self::cmd($sock, 'STARTTLS', '220');
 
-        // Upgrade to TLS
-        if (!stream_socket_enable_crypto($sock, true, STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT)) {
-            // Fallback to generic TLS
-            stream_socket_enable_crypto($sock, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+        if (!$useSSL) {
+            // STARTTLS upgrade for port 587
+            self::cmd($sock, 'STARTTLS', '220');
+            if (!stream_socket_enable_crypto($sock, true, STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT)) {
+                stream_socket_enable_crypto($sock, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+            }
+            self::cmd($sock, 'EHLO ' . (gethostname() ?: 'localhost'), '250');
         }
 
-        self::cmd($sock, 'EHLO ' . (gethostname() ?: 'localhost'), '250');
         self::cmd($sock, 'AUTH LOGIN', '334');
         self::cmd($sock, base64_encode($user), '334');
         self::cmd($sock, base64_encode($pass), '235');
@@ -68,10 +70,8 @@ class Mailer {
         self::cmd($sock, "RCPT TO:<{$to}>", '250');
         self::cmd($sock, 'DATA', '354');
 
-        // Build RFC 2822 message
         $encodedFrom    = '=?UTF-8?B?' . base64_encode($fromName) . '?=';
         $encodedSubject = '=?UTF-8?B?' . base64_encode($subject)  . '?=';
-        $boundary       = 'pagezy_' . md5(uniqid('', true));
 
         $msg  = "Date: " . date('r') . "\r\n";
         $msg .= "From: {$encodedFrom} <{$from}>\r\n";
