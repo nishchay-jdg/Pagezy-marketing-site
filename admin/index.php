@@ -585,27 +585,32 @@ td a:hover { text-decoration: underline; }
 
         <!-- Last deployed commit -->
         <?php
-        $gitDir   = CPANEL_REPO_ROOT . '/.git';
-        $liveSha  = '';
-        $liveMsg  = '';
-        $liveTime = '';
+        $gitDir    = CPANEL_REPO_ROOT . '/.git';
+        $liveSha   = '';
+        $liveMsg   = '';
+        $liveTime  = '';
         $liveAuthor = '';
+        // Read SHA from local .git
         if (is_dir($gitDir)) {
             $shaFull = trim((string)@file_get_contents($gitDir . '/refs/heads/main'));
-            if ($shaFull) {
-                $liveSha = substr($shaFull, 0, 7);
-                $rawMsg  = (string)@file_get_contents($gitDir . '/COMMIT_EDITMSG');
-                $liveMsg = trim(explode("\n", trim($rawMsg))[0] ?? '');
-                // Parse last line of git reflog for timestamp + author
-                $logLines = array_filter(explode("\n", trim((string)@file_get_contents($gitDir . '/logs/refs/heads/main'))));
-                if ($logLines) {
-                    $last = end($logLines);
-                    // format: sha sha Name <email> unix_ts tz\tcommit: msg
-                    if (preg_match('/\d \d+\s([^<]+)<[^>]+>\s+(\d+)\s/', $last, $m)) {
-                        $liveAuthor = trim($m[1]);
-                        $liveTime   = date('d M Y, H:i', (int)$m[2]) . ' IST';
-                    }
-                }
+            if ($shaFull) $liveSha = substr($shaFull, 0, 7);
+        }
+        // Fetch commit details from GitHub API (reliable for message/author/date)
+        if ($liveSha) {
+            $ghHeaders = "User-Agent: Pagezy-Admin/1.0\r\nAccept: application/vnd.github.v3+json\r\n";
+            if (GITHUB_TOKEN) $ghHeaders .= "Authorization: Bearer " . GITHUB_TOKEN . "\r\n";
+            $ghCtx = stream_context_create(['http' => ['header' => $ghHeaders, 'timeout' => 5, 'ignore_errors' => true]]);
+            $ghJson = @file_get_contents(
+                'https://api.github.com/repos/' . GITHUB_MARKETING_REPO . '/commits/' . $liveSha,
+                false, $ghCtx
+            );
+            $ghData = $ghJson ? json_decode($ghJson, true) : null;
+            if (!empty($ghData['commit'])) {
+                $lines      = explode("\n", trim($ghData['commit']['message'] ?? ''));
+                $liveMsg    = $lines[0];
+                $liveAuthor = $ghData['commit']['author']['name'] ?? '';
+                $rawDate    = $ghData['commit']['author']['date'] ?? '';
+                if ($rawDate) $liveTime = date('d M Y, H:i', strtotime($rawDate)) . ' UTC';
             }
         }
         ?>
