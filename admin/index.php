@@ -68,19 +68,25 @@ if ($authed) {
         $msg    = '';
 
         // Method 1: direct git via exec()
-        // Builds an authenticated HTTPS URL using GITHUB_TOKEN so no SSH key or stored credential needed
-        if (can_exec()) {
-            $safeRepo = escapeshellarg($repo);
-            $token    = defined('GITHUB_TOKEN') ? GITHUB_TOKEN : '';
-            $ghRepo   = defined('GITHUB_MARKETING_REPO') ? GITHUB_MARKETING_REPO : '';
+        $token  = defined('GITHUB_TOKEN') ? GITHUB_TOKEN : '';
+        $ghRepo = defined('GITHUB_MARKETING_REPO') ? GITHUB_MARKETING_REPO : '';
 
-            // Prefer token-authenticated URL; fall back to stored origin
+        if (can_exec()) {
+            $safeRepo   = escapeshellarg($repo);
+            $configFile = $repo . '/config.php';
+
+            // Snapshot the real config.php NOW before git can overwrite it
+            $configSnap = $configFile . '.deploy_snap';
+            if (file_exists($configFile)) @copy($configFile, $configSnap);
+
+            // Fetch using token-authenticated URL, forcing local main ref to update
             if ($token && $ghRepo) {
-                $fetchUrl = escapeshellarg('https://' . $token . '@github.com/' . $ghRepo . '.git');
-                $fetchCmd = 'cd ' . $safeRepo . ' && git fetch ' . $fetchUrl . ' main 2>&1';
-                $resetCmd = 'cd ' . $safeRepo . ' && git reset --hard FETCH_HEAD 2>&1';
+                $authUrl  = 'https://' . $token . '@github.com/' . $ghRepo . '.git';
+                // +refs/heads/main:refs/heads/main forces the local branch ref to update
+                $fetchCmd = 'cd ' . $safeRepo . ' && git fetch ' . escapeshellarg($authUrl) . ' +refs/heads/main:refs/heads/main 2>&1';
+                $resetCmd = 'cd ' . $safeRepo . ' && git reset --hard refs/heads/main 2>&1';
             } else {
-                $fetchCmd = 'cd ' . $safeRepo . ' && git fetch origin main 2>&1';
+                $fetchCmd = 'cd ' . $safeRepo . ' && git fetch origin +refs/heads/main:refs/remotes/origin/main 2>&1';
                 $resetCmd = 'cd ' . $safeRepo . ' && git reset --hard origin/main 2>&1';
             }
 
@@ -89,14 +95,24 @@ if ($authed) {
             if ($ret === 0) {
                 $out2 = []; $ret2 = 0;
                 exec($resetCmd, $out2, $ret2);
+
+                // Restore real config.php — always prefer our own snapshot over the old backup
+                if (file_exists($configSnap)) {
+                    @copy($configSnap, $configFile);
+                    @unlink($configSnap);
+                } elseif (file_exists($backup)) {
+                    @copy($backup, $configFile);
+                }
+
                 if ($ret2 === 0) {
-                    if (file_exists($backup)) @copy($backup, $repo . '/config.php');
                     $ok  = true;
                     $msg = "✓ Deployed successfully via git! " . trim(end($out2));
                 } else {
                     $msg = "✗ git reset failed: " . implode(' ', $out2);
                 }
             } else {
+                // Cleanup snapshot on failure
+                if (file_exists($configSnap)) @unlink($configSnap);
                 $msg = "✗ git fetch failed: " . implode(' ', $out);
             }
         } else {
