@@ -2,10 +2,9 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/pagezy/public_html/
-    # Backup server config (has real DB/API tokens — never overwrite)
-    - /bin/cp $DEPLOYPATH/config.php /tmp/pagezy_config.bak 2>/dev/null; true
-    # Deploy all files from repo
-    - /bin/cp -R * $DEPLOYPATH
-    - /bin/cp -f .htaccess $DEPLOYPATH
-    # Restore real server config — tokens stay intact
-    - /bin/cp /tmp/pagezy_config.bak $DEPLOYPATH/config.php 2>/dev/null; true
+    - export BACKUP=/home/pagezy/pagezy_config_backup.php
+    # Restore real config from the permanent backup outside public_html
+    # (fix-deploy.php saves there before triggering pull)
+    - /bin/cp -f $BACKUP $DEPLOYPATH/config.php 2>/dev/null; true
+    # Fall back to /tmp backup if permanent backup doesn't exist
+    - if [ ! -s $DEPLOYPATH/config.php ]; then /bin/cp -f /tmp/pagezy_config.bak $DEPLOYPATH/config.php 2>/dev/null; true; fi
