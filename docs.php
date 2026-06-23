@@ -302,140 +302,154 @@ include 'includes/nav.php';
         <!-- ═══════════ LOCAL STEPS ═══════════ -->
         <div id="steps-local" style="display:none;">
 
+            <!-- Step 1: Download -->
             <div class="wiz-card" data-step="0">
                 <span class="wiz-card-icon">📦</span>
                 <div class="wiz-step-label"><span>Step 1 of 6</span></div>
                 <h2>Download Pagezy CMS</h2>
-                <p class="wiz-card-sub">First, download the Pagezy ZIP to your computer. We'll extract it into your local server folder in the next step.</p>
+                <p class="wiz-card-sub">Let's start! Click the button below to download the Pagezy ZIP file. Save it somewhere easy to find — like your Desktop.</p>
                 <a href="/serve-download.php" class="wiz-btn-next" style="display:inline-flex;text-decoration:none;margin-bottom:20px;">
                     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Download ZIP
+                    Download ZIP (free)
                 </a>
+                <div class="wiz-tip"><strong>💡 Tip:</strong> The download is a ZIP file — like a compressed folder. We'll unzip it in Step 3. No technical knowledge needed yet!</div>
                 <div class="wiz-nav">
                     <button class="wiz-btn-prev" onclick="changeStep(-1)">← Back to paths</button>
                     <button class="wiz-btn-next" onclick="changeStep(1)">I've downloaded it →</button>
                 </div>
             </div>
 
+            <!-- Step 2: Install XAMPP -->
             <div class="wiz-card" data-step="1">
-                <span class="wiz-card-icon">🛠️</span>
+                <span class="wiz-card-icon">🖥️</span>
                 <div class="wiz-step-label"><span>Step 2 of 6</span></div>
-                <h2>Install a local server</h2>
-                <p class="wiz-card-sub">You need PHP and MySQL running on your machine. These free tools set everything up in one click — no command line needed for this step.</p>
+                <h2>Install XAMPP — your local server</h2>
+                <p class="wiz-card-sub">XAMPP is a free app that turns your computer into a mini web server. It's a simple installer — just click Next a few times. <strong>No command line. No technical knowledge needed.</strong></p>
                 <div class="os-tabs">
                     <button class="os-tab active" onclick="switchOS(this,'os-win')">Windows</button>
                     <button class="os-tab" onclick="switchOS(this,'os-mac')">Mac</button>
                 </div>
                 <div class="os-tab-content active" id="os-win">
                     <ul class="wiz-list">
-                        <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Download <strong><a href="https://laragon.org/download/" target="_blank" style="color:#818CF8;">Laragon</a></strong> (free, ~80 MB). It gives you PHP, MySQL, and a web server all in one installer.</span></li>
-                        <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Run the installer and click through the defaults. Laragon will appear in your system tray.</span></li>
-                        <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Click <strong>Start All</strong> in the Laragon window. You'll see Apache and MySQL turn green.</span></li>
+                        <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Download <a href="https://www.apachefriends.org/download.html" target="_blank" style="color:#818CF8;font-weight:700;">XAMPP for Windows</a> (free, ~160 MB). Pick the latest version.</span></li>
+                        <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Run the installer. Click <strong>Next → Next → Install</strong>. Leave all default settings as-is.<span class="note">If Windows shows a security warning, click "Allow" — it's safe.</span></span></li>
+                        <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Once installed, open the <strong>XAMPP Control Panel</strong>. Click <strong>Start</strong> next to <strong>Apache</strong> and <strong>MySQL</strong>. Both should turn green.</span></li>
                     </ul>
+                    <div style="background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--muted);margin-top:12px;">
+                        ✅ If you see green lights next to Apache and MySQL in the Control Panel, you're ready!
+                    </div>
                 </div>
                 <div class="os-tab-content" id="os-mac">
                     <ul class="wiz-list">
-                        <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Download <strong><a href="https://herd.laravel.com" target="_blank" style="color:#818CF8;">Laravel Herd</a></strong> (free). It installs PHP and a local server automatically.</span></li>
-                        <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Open the DMG file and drag Herd to your Applications folder. Launch it.</span></li>
-                        <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Herd starts automatically and sets up PHP. For MySQL, install <strong><a href="https://tableplus.com" target="_blank" style="color:#818CF8;">TablePlus</a></strong> or use Homebrew: <code>brew install mysql</code>.</span></li>
+                        <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Download <a href="https://www.apachefriends.org/download.html" target="_blank" style="color:#818CF8;font-weight:700;">XAMPP for macOS</a> (free, ~160 MB).</span></li>
+                        <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Open the downloaded <code>.dmg</code> file → drag XAMPP to your Applications folder.</span></li>
+                        <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Open XAMPP from Applications → click <strong>Start</strong> next to <strong>Apache</strong> and <strong>MySQL</strong>.</span></li>
                     </ul>
+                    <div style="background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--muted);margin-top:12px;">
+                        ✅ When both services are running, open your browser and go to <code>http://localhost</code> — you should see the XAMPP welcome page.
+                    </div>
                 </div>
                 <div class="wiz-nav">
                     <button class="wiz-btn-prev" onclick="changeStep(-1)">← Previous</button>
-                    <button class="wiz-btn-next" onclick="changeStep(1)">Server is running →</button>
+                    <button class="wiz-btn-next" onclick="changeStep(1)">XAMPP is running →</button>
                 </div>
             </div>
 
+            <!-- Step 3: Put files in place -->
             <div class="wiz-card" data-step="2">
                 <span class="wiz-card-icon">📂</span>
                 <div class="wiz-step-label"><span>Step 3 of 6</span></div>
-                <h2>Extract the files</h2>
-                <p class="wiz-card-sub">Put the Pagezy files into the right folder so your local server can find them.</p>
+                <h2>Put the files in place</h2>
+                <p class="wiz-card-sub">Think of <strong>htdocs</strong> as XAMPP's website folder. Any folder you put there becomes a local website. We'll put Pagezy there now.</p>
                 <div class="os-tabs">
-                    <button class="os-tab active" onclick="switchOS(this,'os-win2')">Windows (Laragon)</button>
-                    <button class="os-tab" onclick="switchOS(this,'os-mac2')">Mac (Herd)</button>
+                    <button class="os-tab active" onclick="switchOS(this,'os-win2')">Windows</button>
+                    <button class="os-tab" onclick="switchOS(this,'os-mac2')">Mac</button>
                 </div>
                 <div class="os-tab-content active" id="os-win2">
                     <ul class="wiz-list">
-                        <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Open the Laragon window → click <strong>Root</strong> (or press <kbd>Win+R</kbd> and type <code>C:\laragon\www</code>).</span></li>
-                        <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Extract the Pagezy ZIP here. You should end up with a folder like <code>C:\laragon\www\pagezy\</code>.</span></li>
-                        <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Laragon will auto-detect it and create a URL like <code>http://pagezy.test</code>.</span></li>
+                        <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Open <strong>File Explorer</strong> → navigate to <code>C:\xampp\htdocs\</code></span></li>
+                        <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Create a new folder called <strong>pagezy</strong> inside htdocs.<span class="note">Right-click inside htdocs → New → Folder → type "pagezy"</span></span></li>
+                        <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Find the ZIP you downloaded in Step 1 → right-click it → <strong>Extract All</strong>.</span></li>
+                        <li><span class="wiz-list-num">4</span><span class="wiz-list-text">Copy everything from inside the extracted folder into <code>C:\xampp\htdocs\pagezy\</code><span class="note">You should see files like index.php, .env.example, etc. directly inside the pagezy folder.</span></span></li>
                     </ul>
                 </div>
                 <div class="os-tab-content" id="os-mac2">
                     <ul class="wiz-list">
-                        <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Open Finder → navigate to your home folder → find the <strong>Herd</strong> folder.</span></li>
-                        <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Extract the Pagezy ZIP inside the Herd folder: <code>~/Herd/pagezy/</code>.</span></li>
-                        <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Herd auto-detects it at <code>http://pagezy.test</code>.</span></li>
+                        <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Open <strong>Finder</strong> → press <kbd>Cmd+Shift+G</kbd> → type <code>/Applications/XAMPP/htdocs</code> → press Enter.</span></li>
+                        <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Create a new folder called <strong>pagezy</strong> inside htdocs.<span class="note">File → New Folder → type "pagezy"</span></span></li>
+                        <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Double-click the downloaded ZIP to extract it → copy all contents into the <strong>pagezy</strong> folder.</span></li>
                     </ul>
                 </div>
+                <div class="wiz-tip" style="margin-top:16px;"><strong>✅ Done right when:</strong> If you go to <code>http://localhost/pagezy/public</code> and see a Pagezy page (even with errors), the files are in the right place!</div>
                 <div class="wiz-nav">
                     <button class="wiz-btn-prev" onclick="changeStep(-1)">← Previous</button>
                     <button class="wiz-btn-next" onclick="changeStep(1)">Files are in place →</button>
                 </div>
             </div>
 
+            <!-- Step 4: Create database via phpMyAdmin -->
             <div class="wiz-card" data-step="3">
-                <span class="wiz-card-icon">⚙️</span>
-                <div class="wiz-step-label"><span>Step 4 of 6</span></div>
-                <h2>Install dependencies &amp; configure</h2>
-                <p class="wiz-card-sub">Pagezy is built on Laravel, which needs a few packages installed. Open a terminal in the project folder and run these commands one at a time.</p>
-                <div class="wiz-tip"><strong>Opening a terminal in Laragon:</strong> Right-click the Laragon tray icon → <strong>Quick App → Terminal</strong>. In Herd on Mac: open the built-in terminal from the menu bar icon.</div>
-                <ul class="wiz-list">
-                    <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Navigate to your project folder in the terminal:<br><code>cd C:\laragon\www\pagezy</code> (Windows) or <code>cd ~/Herd/pagezy</code> (Mac)</span></li>
-                    <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Install PHP packages (this takes 1–2 minutes):</span></li>
-                </ul>
-                <div class="wiz-code">composer install</div>
-                <ul class="wiz-list">
-                    <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Copy the config file template:</span></li>
-                </ul>
-                <div class="wiz-code">cp .env.example .env</div>
-                <ul class="wiz-list">
-                    <li><span class="wiz-list-num">4</span><span class="wiz-list-text">Generate your app key (a security secret for your site):</span></li>
-                </ul>
-                <div class="wiz-code">php artisan key:generate</div>
-                <div class="wiz-nav">
-                    <button class="wiz-btn-prev" onclick="changeStep(-1)">← Previous</button>
-                    <button class="wiz-btn-next" onclick="changeStep(1)">Commands ran OK →</button>
-                </div>
-            </div>
-
-            <div class="wiz-card" data-step="4">
                 <span class="wiz-card-icon">🗄️</span>
-                <div class="wiz-step-label"><span>Step 5 of 6</span></div>
-                <h2>Set up the database</h2>
-                <p class="wiz-card-sub">Open the <code>.env</code> file in a text editor (Notepad on Windows, TextEdit on Mac) and update the database section.</p>
+                <div class="wiz-step-label"><span>Step 4 of 6</span></div>
+                <h2>Create a database</h2>
+                <p class="wiz-card-sub">XAMPP includes <strong>phpMyAdmin</strong> — a visual tool to manage your database. No command line needed at all. Just click and type!</p>
                 <ul class="wiz-list">
-                    <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Create a new local database using Laragon's HeidiSQL (Windows) or TablePlus (Mac). Name it <code>pagezy</code>.</span></li>
-                    <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Open the <code>.env</code> file and find the DB section. Update these lines:</span></li>
+                    <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Open your browser → go to <code>http://localhost/phpmyadmin</code><span class="note">This opens phpMyAdmin — a visual database manager built into XAMPP.</span></span></li>
+                    <li><span class="wiz-list-num">2</span><span class="wiz-list-text">In the left sidebar, click <strong>New</strong>.</span></li>
+                    <li><span class="wiz-list-num">3</span><span class="wiz-list-text">In the "Database name" box, type: <strong>pagezy</strong></span></li>
+                    <li><span class="wiz-list-num">4</span><span class="wiz-list-text">Click the <strong>Create</strong> button. You'll see "pagezy" appear in the left sidebar.</span></li>
                 </ul>
-                <div class="wiz-code">DB_DATABASE=pagezy
-DB_USERNAME=root
-DB_PASSWORD=          ← leave blank for Laragon</div>
-                <ul class="wiz-list">
-                    <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Save the file. Then in your terminal, run:</span></li>
-                </ul>
-                <div class="wiz-code">php artisan migrate</div>
-                <ul class="wiz-list">
-                    <li><span class="wiz-list-num">4</span><span class="wiz-list-text">You'll see a list of tables being created. When it says <strong>"Migration table created"</strong> — you're done!</span></li>
-                </ul>
+                <div style="background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2);border-radius:10px;padding:12px 16px;font-size:13px;color:#6EE7B7;margin-top:4px;">
+                    🎉 That's your database! XAMPP's default username is <strong>root</strong> with no password — we'll use that in the next step.
+                </div>
                 <div class="wiz-nav">
                     <button class="wiz-btn-prev" onclick="changeStep(-1)">← Previous</button>
-                    <button class="wiz-btn-next" onclick="changeStep(1)">Database is set up →</button>
+                    <button class="wiz-btn-next" onclick="changeStep(1)">Database is created →</button>
                 </div>
             </div>
 
+            <!-- Step 5: Rename .env.example → .env, change ONE line -->
+            <div class="wiz-card" data-step="4">
+                <span class="wiz-card-icon">📝</span>
+                <div class="wiz-step-label"><span>Step 5 of 6</span></div>
+                <h2>Quick config — just 2 clicks &amp; 1 word</h2>
+                <p class="wiz-card-sub">Pagezy needs to know your database name. You'll edit one line in a text file — that's it. Promise it's easier than it sounds!</p>
+                <ul class="wiz-list">
+                    <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Open your <strong>pagezy</strong> folder (<code>C:\xampp\htdocs\pagezy</code> on Windows, <code>/Applications/XAMPP/htdocs/pagezy</code> on Mac).</span></li>
+                    <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Find the file named <strong>.env.example</strong> → right-click it → <strong>Copy</strong> → <strong>Paste</strong> it in the same folder.<span class="note">You'll get a file called ".env.example - Copy" or similar.</span></span></li>
+                    <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Rename that copy to exactly: <strong>.env</strong><span class="note">On Windows you may need to enable "Show file extensions" — or just rename it in Notepad's Save As dialog.</span></span></li>
+                    <li><span class="wiz-list-num">4</span><span class="wiz-list-text">Open <strong>.env</strong> with Notepad (Windows) or TextEdit (Mac).</span></li>
+                    <li><span class="wiz-list-num">5</span><span class="wiz-list-text">Find the line that says <code>DB_DATABASE=laravel</code> — change <strong>laravel</strong> to <strong>pagezy</strong> so it reads:</span></li>
+                </ul>
+                <div class="wiz-code">DB_DATABASE=pagezy</div>
+                <ul class="wiz-list">
+                    <li><span class="wiz-list-num">6</span><span class="wiz-list-text">Save the file (<kbd>Ctrl+S</kbd> on Windows, <kbd>Cmd+S</kbd> on Mac). Close Notepad.</span></li>
+                </ul>
+                <div class="wiz-tip"><strong>Leave everything else as-is.</strong> XAMPP's default username is <code>root</code> and has no password — the .env file already has these defaults set.</div>
+                <div class="wiz-nav">
+                    <button class="wiz-btn-prev" onclick="changeStep(-1)">← Previous</button>
+                    <button class="wiz-btn-next" onclick="changeStep(1)">Config file is ready →</button>
+                </div>
+            </div>
+
+            <!-- Step 6: Done! Visit installer -->
             <div class="wiz-card done-card" data-step="5">
-                <span class="wiz-card-icon">🚀</span>
-                <h2>You're running locally!</h2>
-                <p class="wiz-card-sub done-sub">Pagezy is now running on your machine. Open your browser and go to the local URL to see it.</p>
-                <div class="wiz-code" style="display:inline-block;margin:0 auto 24px;">http://pagezy.test/setup</div>
-                <p style="font-size:13px;color:var(--muted);margin-bottom:28px;">Visit <code>/setup</code> to finish installation — create your admin account and you're done.</p>
+                <span class="wiz-card-icon">🎉</span>
+                <h2>Last step — run the installer!</h2>
+                <p class="wiz-card-sub done-sub">The web installer sets up everything else automatically — no commands, no technical stuff. Just fill in a short form and you're live.</p>
+                <div style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:20px 24px;text-align:left;margin-bottom:24px;">
+                    <ul class="wiz-list" style="margin-bottom:0;">
+                        <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Open your browser → go to: <code>http://localhost/pagezy/public/setup</code></span></li>
+                        <li><span class="wiz-list-num">2</span><span class="wiz-list-text">The installer will ask for your <strong>site name</strong> and <strong>admin password</strong>. Fill those in.</span></li>
+                        <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Click <strong>Install Pagezy</strong> — it sets up all the database tables automatically.</span></li>
+                        <li><span class="wiz-list-num">4</span><span class="wiz-list-text">You'll be redirected to your admin panel. <strong>You're done!</strong> 🚀</span></li>
+                    </ul>
+                </div>
                 <div class="done-links">
                     <button onclick="resetWizard()" class="done-secondary" style="border:none;cursor:pointer;">← Start over</button>
                 </div>
-                <div style="margin-top:36px;padding-top:24px;border-top:1px solid rgba(255,255,255,.07);font-size:13px;color:var(--muted);">
-                    Stuck? <a href="/contact.php" style="color:#818CF8;">Contact us</a> and we'll help you get unstuck.
+                <div style="margin-top:28px;padding-top:20px;border-top:1px solid rgba(255,255,255,.07);font-size:13px;color:var(--muted);">
+                    Stuck on any step? <a href="/contact.php" style="color:#818CF8;">Contact us</a> — we'll help you personally, no judgment!
                 </div>
             </div>
 
@@ -531,7 +545,7 @@ var currentPath = '';
 var currentStep = 0;
 
 var serverSteps = ['Download','Check hosting','Create database','Upload files','Point domain','Run installer','Done!'];
-var localSteps  = ['Download','Install server','Extract files','Configure','Set up database','Done!'];
+var localSteps  = ['Download','Install XAMPP','Put files in place','Create database','Config file','Run installer'];
 
 function startWizard(path) {
     currentPath = path;
