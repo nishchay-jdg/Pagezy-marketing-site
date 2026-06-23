@@ -1,26 +1,25 @@
 <?php
-// Serves the CMS ZIP securely (no direct file URL exposed)
 require_once 'config.php';
 
-$file = __DIR__ . '/' . DOWNLOAD_FILE;
-
-if (!file_exists($file)) {
-    http_response_code(404);
-    exit('Download file not found. Please contact support.');
+// If we have a cached GitHub release URL, redirect there
+if (file_exists(RELEASE_CACHE)) {
+    $release = json_decode(file_get_contents(RELEASE_CACHE), true);
+    if (!empty($release['download_url'])) {
+        header('Location: ' . $release['download_url']);
+        exit;
+    }
 }
 
-// Log the download
-try {
-    ensureTable();
-    db()->exec("UPDATE pagezy_downloads SET downloaded=1
-                WHERE email='" . ($_SESSION['dl_email'] ?? '') . "'
-                ORDER BY created_at DESC LIMIT 1");
-} catch (Exception $e) { /* silent */ }
+// Fallback: serve local ZIP if present
+$file = __DIR__ . '/' . DOWNLOAD_FILE;
+if (!file_exists($file)) {
+    http_response_code(404);
+    exit('Download not available yet. Please contact support@pagezy.io');
+}
 
 header('Content-Type: application/zip');
 header('Content-Disposition: attachment; filename="' . DOWNLOAD_FILENAME . '"');
 header('Content-Length: ' . filesize($file));
 header('Cache-Control: no-cache, must-revalidate');
-header('Pragma: no-cache');
 readfile($file);
 exit;

@@ -1,0 +1,8 @@
+# No directory listing
+Options -Indexes
+
+# Block direct access to anything except index.php
+<FilesMatch "^(?!index\.php).*$">
+    Order deny,allow
+    Deny from all
+</FilesMatch>

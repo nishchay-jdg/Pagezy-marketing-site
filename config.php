@@ -68,6 +68,16 @@ function ensureContactTable(): void {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 }
 
+// Admin panel password
+define('ADMIN_PASSWORD', 'pagezy@admin2024');
+
+// GitHub repos
+define('GITHUB_CMS_REPO',        'nishchay-jdg/Pagezy');
+define('GITHUB_MARKETING_REPO',  'nishchay-jdg/Pagezy-marketing-site');
+
+// Release cache file (auto-written by admin panel)
+define('RELEASE_CACHE',  __DIR__ . '/downloads/release-cache.json');
+
 // Leads admin password — change this before going live
 define('LEADS_PASSWORD', 'pagezy@leads2024');
 
