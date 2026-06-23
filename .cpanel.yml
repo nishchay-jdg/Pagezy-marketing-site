@@ -1,0 +1,7 @@
+---
+deployment:
+  tasks:
+    # Copy all files to public_html (cPanel Git Version Control)
+    - export DEPLOYPATH=/home/$USER/public_html/
+    - /bin/cp -R * $DEPLOYPATH
+    - /bin/cp -R .htaccess $DEPLOYPATH

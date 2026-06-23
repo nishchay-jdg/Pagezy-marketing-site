@@ -499,38 +499,85 @@ td a:hover { text-decoration: underline; }
     elseif ($tab === 'deploy'): ?>
 
         <div class="page-title">Deploy</div>
-        <div class="page-sub">Pull latest code from GitHub and deploy changes live.</div>
+        <div class="page-sub">Auto-deploy via GitHub Actions → FTP, or manually via cPanel Git Version Control.</div>
 
-        <?php
-        $dir = realpath(__DIR__ . '/..');
-        $gitLog   = shell_exec("cd " . escapeshellarg($dir) . " && git log --oneline -5 2>&1");
-        $gitStatus = shell_exec("cd " . escapeshellarg($dir) . " && git status --short 2>&1");
-        $gitBranch = trim(shell_exec("cd " . escapeshellarg($dir) . " && git rev-parse --abbrev-ref HEAD 2>&1") ?? '');
-        $gitRemote = trim(shell_exec("cd " . escapeshellarg($dir) . " && git remote get-url origin 2>&1") ?? '');
-        ?>
+        <!-- Method 1: GitHub Actions (primary) -->
+        <div class="card">
+            <div class="card-title">
+                Method 1 — GitHub Actions FTP Deploy <span class="badge badge-green">Recommended</span>
+            </div>
+            <p style="color:var(--muted);font-size:13px;margin-bottom:18px;">Every push to <code style="background:rgba(255,255,255,.07);padding:2px 6px;border-radius:5px;">main</code> automatically deploys to cPanel via FTP. No terminal needed. Set these 3 secrets in your GitHub repo once:</p>
 
-        <div class="deploy-grid">
-            <div class="card">
-                <div class="card-title">Repository Status</div>
-                <div class="info-row"><span class="label">Branch</span><span class="val"><?= h($gitBranch ?: 'unknown') ?></span></div>
-                <div class="info-row"><span class="label">Remote</span><span class="val" style="font-size:11px;"><?= h($gitRemote ?: 'not configured') ?></span></div>
-                <div class="info-row"><span class="label">Working tree</span><span class="val"><?= trim($gitStatus) ? '<span class="badge badge-yellow">Uncommitted changes</span>' : '<span class="badge badge-green">Clean</span>' ?></span></div>
+            <div style="display:grid;gap:10px;margin-bottom:18px;">
+                <?php
+                $secrets = [
+                    ['FTP_HOST',     'Your cPanel FTP hostname', 'e.g. ftp.pagezy.io  or  files.yourdomain.com'],
+                    ['FTP_USER',     'Your cPanel FTP username', 'e.g. pagezy@pagezy.io  (shown in cPanel → FTP Accounts)'],
+                    ['FTP_PASSWORD', 'Your cPanel FTP password', 'Same as cPanel login or FTP-specific password'],
+                    ['FTP_PATH',     'Server path to public_html', 'e.g.  /public_html/  or  /public_html/subdomain/'],
+                ];
+                foreach ($secrets as [$name, $label, $hint]): ?>
+                <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:14px 16px;">
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+                        <code style="background:rgba(99,102,241,.15);color:#A5B4FC;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700;"><?= $name ?></code>
+                        <span style="font-size:13px;font-weight:600;"><?= $label ?></span>
+                    </div>
+                    <div style="font-size:12px;color:var(--muted);"><?= $hint ?></div>
+                </div>
+                <?php endforeach; ?>
             </div>
-            <div class="card">
-                <div class="card-title">Pull Latest Code</div>
-                <p style="color:var(--muted);font-size:13px;margin-bottom:16px;">Runs <code style="background:rgba(255,255,255,.07);padding:2px 6px;border-radius:5px;">git pull</code> on the server. Any new commits pushed to GitHub will go live immediately.</p>
-                <form method="POST">
-                    <button name="git_pull" value="1" class="btn btn-primary">Pull from GitHub →</button>
-                </form>
-                <?php if (!function_exists('shell_exec') || shell_exec('echo test') === null): ?>
-                <p style="color:var(--yellow);font-size:12px;margin-top:12px;">⚠ shell_exec is disabled on this server. Enable it in cPanel PHP settings or contact your host.</p>
-                <?php endif; ?>
+
+            <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:18px;">
+                <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Steps to set up</div>
+                <?php
+                $steps = [
+                    'Go to your GitHub repo → <strong>Settings → Secrets and variables → Actions</strong>',
+                    'Click <strong>New repository secret</strong> and add each of the 4 secrets above',
+                    'The workflow file is already in the repo at <code style="background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;">.github/workflows/deploy.yml</code>',
+                    'Push any change to <code style="background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;">main</code> — GitHub Actions will deploy automatically',
+                    'Or trigger manually: GitHub repo → <strong>Actions → Deploy to Pagezy.io → Run workflow</strong>',
+                ];
+                foreach ($steps as $i => $step): ?>
+                <div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;">
+                    <span style="width:22px;height:22px;border-radius:50%;background:rgba(99,102,241,.2);color:#818CF8;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><?= $i+1 ?></span>
+                    <span style="color:var(--muted);"><?= $step ?></span>
+                </div>
+                <?php endforeach; ?>
             </div>
+
+            <a href="https://github.com/<?= GITHUB_MARKETING_REPO ?>/settings/secrets/actions" target="_blank" class="btn btn-primary">Open GitHub Secrets →</a>
+            <a href="https://github.com/<?= GITHUB_MARKETING_REPO ?>/actions" target="_blank" class="btn btn-outline" style="margin-left:8px;">View Deploy Runs ↗</a>
         </div>
 
+        <!-- Method 2: cPanel Git Version Control -->
         <div class="card">
-            <div class="card-title">Recent Commits</div>
-            <pre style="font-size:12px;color:var(--muted);line-height:1.8;white-space:pre-wrap;"><?= h($gitLog ?: 'No git history found. Make sure the site is deployed from a git repo.') ?></pre>
+            <div class="card-title">
+                Method 2 — cPanel Git Version Control <span class="badge badge-indigo">One-click pull</span>
+            </div>
+            <p style="color:var(--muted);font-size:13px;margin-bottom:18px;">Clone the repo directly inside cPanel. Then pull updates manually from the cPanel UI whenever needed. Good as a backup or for one-off updates.</p>
+
+            <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:18px;">
+                <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Setup steps</div>
+                <?php
+                $steps2 = [
+                    'Log in to cPanel → search for <strong>Git™ Version Control</strong>',
+                    'Click <strong>Create</strong> → paste the repo URL: <code style="background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;">https://github.com/' . GITHUB_MARKETING_REPO . '.git</code>',
+                    'Set <strong>Repository Path</strong> to your public_html folder (e.g. <code style="background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;">/home/username/public_html</code>)',
+                    'If the repo is private: generate a <strong>GitHub Personal Access Token</strong> (classic, repo scope) and use it as the password in the clone URL: <code style="background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;">https://TOKEN@github.com/' . GITHUB_MARKETING_REPO . '.git</code>',
+                    'Click <strong>Create</strong> — cPanel clones the repo. The <code style="background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;">.cpanel.yml</code> file in the repo handles copying files to public_html',
+                    'To update: go back to Git Version Control → click <strong>Update</strong> (or <strong>Deploy HEAD Commit</strong>)',
+                ];
+                foreach ($steps2 as $i => $step): ?>
+                <div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;">
+                    <span style="width:22px;height:22px;border-radius:50%;background:rgba(79,70,229,.2);color:#818CF8;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><?= $i+1 ?></span>
+                    <span style="color:var(--muted);"><?= $step ?></span>
+                </div>
+                <?php endforeach; ?>
+            </div>
+
+            <div style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--yellow);">
+                💡 <strong>Generate a GitHub token:</strong> GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token → check <strong>repo</strong> scope → copy token
+            </div>
         </div>
 
     <?php
