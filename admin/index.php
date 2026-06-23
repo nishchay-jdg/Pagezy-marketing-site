@@ -214,11 +214,13 @@ if ($authed) {
 // ── Helpers ───────────────────────────────────────────────
 function h(string $s): string { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
 function timeAgo(string $ts): string {
-    $diff = time() - strtotime($ts);
-    if ($diff < 60)     return $diff . 's ago';
-    if ($diff < 3600)   return floor($diff/60) . 'm ago';
-    if ($diff < 86400)  return floor($diff/3600) . 'h ago';
-    return floor($diff/86400) . 'd ago';
+    if (!$ts) return '—';
+    // Format directly from MySQL datetime string to avoid PHP/MySQL timezone mismatch
+    $months = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    if (preg_match('/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/', $ts, $m)) {
+        return $m[3] . ' ' . ($months[(int)$m[2]] ?? $m[2]) . ' ' . $m[1] . ', ' . $m[4] . ':' . $m[5];
+    }
+    return $ts;
 }
 ?>
 <!DOCTYPE html>
