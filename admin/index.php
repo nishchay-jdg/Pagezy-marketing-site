@@ -67,43 +67,29 @@ if ($authed) {
         $ok     = false;
         $msg    = '';
 
-        // Method 1: direct git via exec()
         $token  = defined('GITHUB_TOKEN') ? GITHUB_TOKEN : '';
         $ghRepo = defined('GITHUB_MARKETING_REPO') ? GITHUB_MARKETING_REPO : '';
 
+        // Method 1: direct git via exec()
         if (can_exec()) {
-            $safeRepo   = escapeshellarg($repo);
-            $configFile = $repo . '/config.php';
+            $safeRepo = escapeshellarg($repo);
 
-            // Snapshot the real config.php NOW before git can overwrite it
-            $configSnap = $configFile . '.deploy_snap';
-            if (file_exists($configFile)) @copy($configFile, $configSnap);
+            // Permanently protect config.php from git reset/checkout — harmless to run every time
+            exec('cd ' . $safeRepo . ' && git update-index --skip-worktree config.php 2>&1');
 
-            // Fetch using token-authenticated URL, forcing local main ref to update
             if ($token && $ghRepo) {
                 $authUrl  = 'https://' . $token . '@github.com/' . $ghRepo . '.git';
-                // +refs/heads/main:refs/heads/main forces the local branch ref to update
                 $fetchCmd = 'cd ' . $safeRepo . ' && git fetch ' . escapeshellarg($authUrl) . ' +refs/heads/main:refs/heads/main 2>&1';
-                $resetCmd = 'cd ' . $safeRepo . ' && git reset --hard refs/heads/main 2>&1';
             } else {
                 $fetchCmd = 'cd ' . $safeRepo . ' && git fetch origin +refs/heads/main:refs/remotes/origin/main 2>&1';
-                $resetCmd = 'cd ' . $safeRepo . ' && git reset --hard origin/main 2>&1';
             }
+            $resetCmd = 'cd ' . $safeRepo . ' && git reset --hard refs/heads/main 2>&1';
 
             $out = []; $ret = 0;
             exec($fetchCmd, $out, $ret);
             if ($ret === 0) {
                 $out2 = []; $ret2 = 0;
                 exec($resetCmd, $out2, $ret2);
-
-                // Restore real config.php — always prefer our own snapshot over the old backup
-                if (file_exists($configSnap)) {
-                    @copy($configSnap, $configFile);
-                    @unlink($configSnap);
-                } elseif (file_exists($backup)) {
-                    @copy($backup, $configFile);
-                }
-
                 if ($ret2 === 0) {
                     $ok  = true;
                     $msg = "✓ Deployed successfully via git! " . trim(end($out2));
@@ -111,28 +97,27 @@ if ($authed) {
                     $msg = "✗ git reset failed: " . implode(' ', $out2);
                 }
             } else {
-                // Cleanup snapshot on failure
-                if (file_exists($configSnap)) @unlink($configSnap);
                 $msg = "✗ git fetch failed: " . implode(' ', $out);
             }
         } else {
-            $msg = "✗ exec() is disabled on this server — using cPanel API instead.";
+            $msg = "exec() disabled.";
         }
 
         // Method 2: cPanel UAPI fallback
         if (!$ok) {
+            // Mark skip-worktree via cPanel API (best-effort, may not work)
             $pull  = cpanel_api('VersionControl', 'update');
             $pull2 = (($pull['status'] ?? 0) !== 1) ? cpanel_api('VersionControl', 'update', ['_no_slash' => true]) : null;
             $pull  = (($pull['status'] ?? 0) === 1) ? $pull : ($pull2 ?? $pull);
             if (($pull['status'] ?? 0) === 1) {
+                // Restore real config.php from backup after cPanel's git pull overwrites it
                 if (file_exists($backup)) @copy($backup, $repo . '/config.php');
                 $ok  = true;
-                $msg = "✓ Pulled from GitHub and deployed successfully!";
+                $msg = "✓ Pulled via cPanel API. NOTE: update config.php SMTP/DB if wiped.";
             } else {
                 $errDetail = $pull['errors'][0] ?? $pull['error'] ?? json_encode($pull);
-                $msg .= "\n✗ cPanel API also failed: " . $errDetail;
-                $msg .= "\n→ exec() available: " . (can_exec() ? 'yes' : 'no');
-                $msg .= "\n→ GITHUB_TOKEN set: " . ($token ? 'yes' : 'no');
+                $msg .= " | cPanel API: " . $errDetail;
+                $msg .= " | exec: " . (can_exec() ? 'yes' : 'no') . " | token: " . ($token ? 'yes ('.strlen($token).'ch)' : 'no');
             }
         }
 
