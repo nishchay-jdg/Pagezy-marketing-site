@@ -3,8 +3,10 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/pagezy/public_html/
     - export BACKUP=/home/pagezy/pagezy_config_backup.php
-    # Restore real config from the permanent backup outside public_html
-    # (fix-deploy.php saves there before triggering pull)
+    # Backup real credentials before overwriting
+    - /bin/cp -f $DEPLOYPATH/config.php $BACKUP 2>/dev/null; true
+    # Copy all files from HEAD checkout to public_html
+    - /bin/cp -RT . $DEPLOYPATH
+    - /bin/cp -f .htaccess $DEPLOYPATH 2>/dev/null; true
+    # Restore real credentials (never let git version overwrite them)
     - /bin/cp -f $BACKUP $DEPLOYPATH/config.php 2>/dev/null; true
-    # Fall back to /tmp backup if permanent backup doesn't exist
-    - if [ ! -s $DEPLOYPATH/config.php ]; then /bin/cp -f /tmp/pagezy_config.bak $DEPLOYPATH/config.php 2>/dev/null; true; fi
