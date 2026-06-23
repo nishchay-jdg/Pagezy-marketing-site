@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Disallow: /leads.php
+Disallow: /config.php
+Disallow: /serve-download.php
+Disallow: /lib/
+
+Sitemap: https://pagezy.io/sitemap.xml

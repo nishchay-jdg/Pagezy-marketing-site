@@ -1,0 +1,20 @@
+# Server config
+config.local.php
+.env
+
+# Downloads folder (large CMS ZIPs stored here)
+downloads/*.zip
+
+# Leads export cache
+*.csv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log

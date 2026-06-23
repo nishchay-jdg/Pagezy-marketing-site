@@ -1,0 +1,20 @@
+<svg viewBox="0 0 72 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="pgMark" x1="72" y1="0" x2="0" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#5B8DEF"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+  </defs>
+  <!--
+    Pagezy P mark:
+    - Thick stem with rounded top-left corner (radius 12)
+    - Large bowl curves right, top connects at (34,0), bottom at y=58
+    - Horizontal slot through arm (evenodd punches the white gap)
+    - Symmetric downward-pointing tail: stem narrows to tip at (12, 100)
+    Colors: blue #5B8DEF top → purple #7C3AED bottom
+  -->
+  <path fill-rule="evenodd" clip-rule="evenodd"
+    d="M12 0C5.373 0 0 5.373 0 12L0 74L12 100L24 74L24 58C48 68 68 52 70 28C72 4 56 -2 34 0Z
+       M24 44L54 44Q62 44 62 50Q62 58 54 58L24 58Z"
+    fill="url(#pgMark)"/>
+</svg>
