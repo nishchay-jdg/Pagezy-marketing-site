@@ -323,8 +323,8 @@ include 'includes/nav.php';
                 <h2>Install a local server</h2>
                 <p class="wiz-card-sub">You need PHP and MySQL running on your machine. These free tools set everything up in one click — no command line needed for this step.</p>
                 <div class="os-tabs">
-                    <button class="os-tab active" onclick="switchOS(this,'win')">Windows</button>
-                    <button class="os-tab" onclick="switchOS(this,'mac')">Mac</button>
+                    <button class="os-tab active" onclick="switchOS(this,'os-win')">Windows</button>
+                    <button class="os-tab" onclick="switchOS(this,'os-mac')">Mac</button>
                 </div>
                 <div class="os-tab-content active" id="os-win">
                     <ul class="wiz-list">
@@ -352,8 +352,8 @@ include 'includes/nav.php';
                 <h2>Extract the files</h2>
                 <p class="wiz-card-sub">Put the Pagezy files into the right folder so your local server can find them.</p>
                 <div class="os-tabs">
-                    <button class="os-tab active" onclick="switchOS(this,'win2')">Windows (Laragon)</button>
-                    <button class="os-tab" onclick="switchOS(this,'mac2')">Mac (Herd)</button>
+                    <button class="os-tab active" onclick="switchOS(this,'os-win2')">Windows (Laragon)</button>
+                    <button class="os-tab" onclick="switchOS(this,'os-mac2')">Mac (Herd)</button>
                 </div>
                 <div class="os-tab-content active" id="os-win2">
                     <ul class="wiz-list">
