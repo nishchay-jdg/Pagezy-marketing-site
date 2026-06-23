@@ -1,5 +1,7 @@
 <?php
 session_start();
+set_time_limit(120);
+ignore_user_abort(true);
 require_once __DIR__ . '/../config.php';
 
 // ── Auth ─────────────────────────────────────────────────
@@ -21,6 +23,14 @@ $authed = !empty($_SESSION['pagezy_admin']);
 
 // ── Actions (require auth) ────────────────────────────────
 $actionMsg = '';
+// Pull flash from session (set by POST actions before redirect)
+if (!empty($_SESSION['flash'])) {
+    $actionMsg     = $_SESSION['flash']['msg'];
+    $actionMsgType = $_SESSION['flash']['type'] ?? 'ok';
+    unset($_SESSION['flash']);
+} else {
+    $actionMsgType = 'ok';
+}
 if ($authed) {
 
     // ── cPanel UAPI helper ────────────────────────────────
@@ -42,19 +52,16 @@ if ($authed) {
 
     // One-click deploy: pull from GitHub then deploy
     if (isset($_POST['cpanel_deploy'])) {
-        // Step 1: Update from remote (git pull)
         $pull = cpanel_api('VersionControl', 'update');
         if (($pull['status'] ?? 0) !== 1) {
-            $actionMsg = "✗ Pull failed: " . ($pull['errors'][0] ?? $pull['error'] ?? json_encode($pull));
+            $_SESSION['flash'] = ['type'=>'err', 'msg' => "✗ Pull failed: " . ($pull['errors'][0] ?? $pull['error'] ?? json_encode($pull))];
         } else {
-            // Step 2: Deploy HEAD commit
             $deploy = cpanel_api('VersionControlDeployment', 'create');
-            if (($deploy['status'] ?? 0) === 1) {
-                $actionMsg = "✓ Pulled from GitHub and deployed successfully!";
-            } else {
-                $actionMsg = "✓ Pulled from GitHub. Deploy queued — check cPanel Git Version Control for status.\n" . ($deploy['errors'][0] ?? '');
-            }
+            $_SESSION['flash'] = ['type'=>'ok', 'msg' => ($deploy['status'] ?? 0) === 1
+                ? "✓ Pulled from GitHub and deployed successfully!"
+                : "✓ Pulled from GitHub. Deploy is running — refresh in 10 seconds to confirm."];
         }
+        header('Location: ?tab=deploy'); exit;
     }
 
     // Fetch latest CMS release from GitHub
@@ -100,7 +107,8 @@ if ($authed) {
         ];
         if (!is_dir(dirname(RELEASE_CACHE))) mkdir(dirname(RELEASE_CACHE), 0755, true);
         file_put_contents(RELEASE_CACHE, json_encode($cache, JSON_PRETTY_PRINT));
-        $actionMsg = "✓ Download link updated — " . $tag;
+        $_SESSION['flash'] = ['type'=>'ok', 'msg' => "✓ Download link updated — " . $tag];
+        header('Location: ?tab=releases'); exit;
     }
 
     // Delete a lead
@@ -377,7 +385,7 @@ td a:hover { text-decoration: underline; }
     <main class="main">
 
     <?php if ($actionMsg): ?>
-        <div class="action-msg <?= str_starts_with($actionMsg,'✗')?'err':'' ?>"><?= h($actionMsg) ?></div>
+        <div class="action-msg <?= ($actionMsgType === 'err') ? 'err' : '' ?>"><?= h($actionMsg) ?></div>
     <?php endif; ?>
 
     <?php
