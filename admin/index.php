@@ -583,52 +583,63 @@ td a:hover { text-decoration: underline; }
             <?php endif; ?>
         </div>
 
-        <!-- Fallback: GitHub Actions (primary) -->
+        <!-- Last deployed commit -->
+        <?php
+        $gitDir   = CPANEL_REPO_ROOT . '/.git';
+        $liveSha  = '';
+        $liveMsg  = '';
+        $liveTime = '';
+        $liveAuthor = '';
+        if (is_dir($gitDir)) {
+            $shaFull = trim((string)@file_get_contents($gitDir . '/refs/heads/main'));
+            if ($shaFull) {
+                $liveSha = substr($shaFull, 0, 7);
+                $rawMsg  = (string)@file_get_contents($gitDir . '/COMMIT_EDITMSG');
+                $liveMsg = trim(explode("\n", trim($rawMsg))[0] ?? '');
+                // Parse last line of git reflog for timestamp + author
+                $logLines = array_filter(explode("\n", trim((string)@file_get_contents($gitDir . '/logs/refs/heads/main'))));
+                if ($logLines) {
+                    $last = end($logLines);
+                    // format: sha sha Name <email> unix_ts tz\tcommit: msg
+                    if (preg_match('/\d \d+\s([^<]+)<[^>]+>\s+(\d+)\s/', $last, $m)) {
+                        $liveAuthor = trim($m[1]);
+                        $liveTime   = date('d M Y, H:i', (int)$m[2]) . ' IST';
+                    }
+                }
+            }
+        }
+        ?>
         <div class="card">
             <div class="card-title">
-                Method 1 — GitHub Actions FTP Deploy <span class="badge badge-green">Recommended</span>
+                Live Deployment
+                <?php if ($liveSha): ?>
+                <a href="https://github.com/<?= GITHUB_MARKETING_REPO ?>/commit/<?= $liveSha ?>" target="_blank"
+                   style="font-family:monospace;font-size:12px;color:#818CF8;font-weight:600;text-decoration:none;background:rgba(99,102,241,.12);padding:3px 10px;border-radius:6px;">
+                    <?= $liveSha ?> ↗
+                </a>
+                <?php endif; ?>
             </div>
-            <p style="color:var(--muted);font-size:13px;margin-bottom:18px;">Every push to <code style="background:rgba(255,255,255,.07);padding:2px 6px;border-radius:5px;">main</code> automatically deploys to cPanel via FTP. No terminal needed. Set these 3 secrets in your GitHub repo once:</p>
-
-            <div style="display:grid;gap:10px;margin-bottom:18px;">
-                <?php
-                $secrets = [
-                    ['FTP_HOST',     'Your cPanel FTP hostname', 'e.g. ftp.pagezy.io  or  files.yourdomain.com'],
-                    ['FTP_USER',     'Your cPanel FTP username', 'e.g. pagezy@pagezy.io  (shown in cPanel → FTP Accounts)'],
-                    ['FTP_PASSWORD', 'Your cPanel FTP password', 'Same as cPanel login or FTP-specific password'],
-                    ['FTP_PATH',     'Server path to public_html', 'e.g.  /public_html/  or  /public_html/subdomain/'],
-                ];
-                foreach ($secrets as [$name, $label, $hint]): ?>
-                <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:14px 16px;">
-                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
-                        <code style="background:rgba(99,102,241,.15);color:#A5B4FC;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700;"><?= $name ?></code>
-                        <span style="font-size:13px;font-weight:600;"><?= $label ?></span>
-                    </div>
-                    <div style="font-size:12px;color:var(--muted);"><?= $hint ?></div>
-                </div>
-                <?php endforeach; ?>
+            <?php if ($liveSha): ?>
+            <div class="info-row">
+                <span class="label">Commit</span>
+                <span class="val" style="max-width:70%;text-align:right;white-space:normal;line-height:1.4;"><?= h($liveMsg) ?></span>
             </div>
-
-            <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:18px;">
-                <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Steps to set up</div>
-                <?php
-                $steps = [
-                    'Go to your GitHub repo → <strong>Settings → Secrets and variables → Actions</strong>',
-                    'Click <strong>New repository secret</strong> and add each of the 4 secrets above',
-                    'The workflow file is already in the repo at <code style="background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;">.github/workflows/deploy.yml</code>',
-                    'Push any change to <code style="background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;">main</code> — GitHub Actions will deploy automatically',
-                    'Or trigger manually: GitHub repo → <strong>Actions → Deploy to Pagezy.io → Run workflow</strong>',
-                ];
-                foreach ($steps as $i => $step): ?>
-                <div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;">
-                    <span style="width:22px;height:22px;border-radius:50%;background:rgba(99,102,241,.2);color:#818CF8;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><?= $i+1 ?></span>
-                    <span style="color:var(--muted);"><?= $step ?></span>
-                </div>
-                <?php endforeach; ?>
+            <?php if ($liveAuthor): ?>
+            <div class="info-row"><span class="label">Author</span><span class="val"><?= h($liveAuthor) ?></span></div>
+            <?php endif; ?>
+            <?php if ($liveTime): ?>
+            <div class="info-row"><span class="label">Deployed at</span><span class="val"><?= h($liveTime) ?></span></div>
+            <?php endif; ?>
+            <div class="info-row">
+                <span class="label">Branch</span>
+                <span class="val">main</span>
             </div>
-
-            <a href="https://github.com/<?= GITHUB_MARKETING_REPO ?>/settings/secrets/actions" target="_blank" class="btn btn-primary">Open GitHub Secrets →</a>
-            <a href="https://github.com/<?= GITHUB_MARKETING_REPO ?>/actions" target="_blank" class="btn btn-outline" style="margin-left:8px;">View Deploy Runs ↗</a>
+            <?php else: ?>
+            <p style="color:var(--muted);font-size:13px;">No deployment info found — deploy first using the button above.</p>
+            <?php endif; ?>
+            <div style="margin-top:16px;">
+                <a href="https://github.com/<?= GITHUB_MARKETING_REPO ?>/commits/main" target="_blank" class="btn btn-outline btn-sm">View commit history ↗</a>
+            </div>
         </div>
 
         <!-- Method 2: cPanel Git Version Control -->
