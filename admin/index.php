@@ -38,8 +38,9 @@ if ($authed) {
         if (!CPANEL_API_TOKEN || !CPANEL_USER) {
             return ['status' => 0, 'error' => 'cPanel API token not configured in config.php'];
         }
-        // cPanel requires trailing slash on repository_root
-        $root  = rtrim(CPANEL_REPO_ROOT, '/') . '/';
+        $noSlash = !empty($params['_no_slash']);
+        unset($params['_no_slash']);
+        $root  = $noSlash ? rtrim(CPANEL_REPO_ROOT, '/') : rtrim(CPANEL_REPO_ROOT, '/') . '/';
         $query = http_build_query(array_merge(['repository_root' => $root], $params));
         $url   = 'https://' . CPANEL_HOST . ':' . CPANEL_PORT . '/execute/' . $module . '/' . $func . '?' . $query;
         $ctx   = stream_context_create(['http' => [
@@ -67,12 +68,14 @@ if ($authed) {
         $msg    = '';
 
         // Method 1: direct git via exec() — bypasses "uncommitted changes" cPanel restriction
+        // Use "cd && git" instead of "git -C" for compatibility with older git versions
         if (can_exec()) {
             $out = []; $ret = 0;
-            exec('git -C ' . escapeshellarg($repo) . ' fetch origin main 2>&1', $out, $ret);
+            $safeRepo = escapeshellarg($repo);
+            exec('cd ' . $safeRepo . ' && git fetch origin main 2>&1', $out, $ret);
             if ($ret === 0) {
                 $out2 = []; $ret2 = 0;
-                exec('git -C ' . escapeshellarg($repo) . ' reset --hard origin/main 2>&1', $out2, $ret2);
+                exec('cd ' . $safeRepo . ' && git reset --hard origin/main 2>&1', $out2, $ret2);
                 if ($ret2 === 0) {
                     if (file_exists($backup)) @copy($backup, $repo . '/config.php');
                     $ok  = true;
@@ -87,7 +90,13 @@ if ($authed) {
 
         // Method 2: cPanel UAPI (fallback when exec not available)
         if (!$ok) {
+            // Try with trailing slash (required by some cPanel versions)
             $pull = cpanel_api('VersionControl', 'update');
+            if (($pull['status'] ?? 0) !== 1) {
+                // Also try without trailing slash
+                $pull2 = cpanel_api('VersionControl', 'update', ['_no_slash' => true]);
+            }
+            $pull = (($pull['status'] ?? 0) === 1) ? $pull : ($pull2 ?? $pull);
             if (($pull['status'] ?? 0) === 1) {
                 if (file_exists($backup)) @copy($backup, $repo . '/config.php');
                 $ok  = true;
