@@ -105,15 +105,18 @@ if ($authed) {
 
         // Method 2: cPanel UAPI fallback
         if (!$ok) {
-            // Mark skip-worktree via cPanel API (best-effort, may not work)
+            // Snapshot real config.php NOW before cPanel's git reset can delete/overwrite it
+            $configFile = $repo . '/config.php';
+            $configSnap = file_exists($configFile) ? file_get_contents($configFile) : null;
+
             $pull  = cpanel_api('VersionControl', 'update');
             $pull2 = (($pull['status'] ?? 0) !== 1) ? cpanel_api('VersionControl', 'update', ['_no_slash' => true]) : null;
             $pull  = (($pull['status'] ?? 0) === 1) ? $pull : ($pull2 ?? $pull);
             if (($pull['status'] ?? 0) === 1) {
-                // Restore real config.php from backup after cPanel's git pull overwrites it
-                if (file_exists($backup)) @copy($backup, $repo . '/config.php');
+                // Restore real config.php — cPanel's git reset may delete it (was previously tracked)
+                if ($configSnap !== null) file_put_contents($configFile, $configSnap);
                 $ok  = true;
-                $msg = "✓ Pulled via cPanel API. NOTE: update config.php SMTP/DB if wiped.";
+                $msg = "✓ Deployed via cPanel API.";
             } else {
                 $errDetail = $pull['errors'][0] ?? $pull['error'] ?? json_encode($pull);
                 $msg .= " | cPanel API: " . $errDetail;
