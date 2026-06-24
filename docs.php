@@ -197,7 +197,7 @@ include 'includes/nav.php';
                 <h2>Check your hosting is ready</h2>
                 <p class="wiz-card-sub">Pagezy works on nearly all shared hosting. Before we continue, make sure your plan supports the basics.</p>
                 <ul class="wiz-list">
-                    <li><span class="wiz-list-num">✓</span><span class="wiz-list-text"><strong>PHP 8.1 or higher</strong> — most hosts in 2024+ have this. Check your cPanel → PHP Selector.<span class="note">Not sure? Email your host: "Do you support PHP 8.1?" They'll confirm within minutes.</span></span></li>
+                    <li><span class="wiz-list-num">✓</span><span class="wiz-list-text"><strong>PHP 8.2 or higher</strong> — check via cPanel → MultiPHP Manager or PHP Selector. Select PHP 8.2 or 8.3 for your domain.<span class="note">Not sure? Email your host: "Do you support PHP 8.2?" They'll confirm quickly. Most hosts since 2023 do.</span></span></li>
                     <li><span class="wiz-list-num">✓</span><span class="wiz-list-text"><strong>MySQL database</strong> — included on all shared hosting plans.</span></li>
                     <li><span class="wiz-list-num">✓</span><span class="wiz-list-text"><strong>Apache or Nginx web server</strong> — this is the default on cPanel hosts. You're likely already set.</span></li>
                     <li><span class="wiz-list-num">✓</span><span class="wiz-list-text"><strong>File Manager access</strong> — available in every cPanel. You'll use this to upload files.</span></li>
@@ -322,31 +322,34 @@ include 'includes/nav.php';
             <!-- Step 2: Install XAMPP -->
             <div class="wiz-card" data-step="1">
                 <span class="wiz-card-icon">🖥️</span>
-                <div class="wiz-step-label"><span>Step 2 of 6</span></div>
+                <div class="wiz-step-label"><span>Step 2 of 7</span></div>
                 <h2>Install XAMPP — your local server</h2>
-                <p class="wiz-card-sub">XAMPP is a free app that turns your computer into a mini web server. It's a simple installer — just click Next a few times. <strong>No command line. No technical knowledge needed.</strong></p>
+                <p class="wiz-card-sub">XAMPP is a free app that turns your computer into a mini web server. It's a simple installer — just click Next a few times. <strong>Important: you need XAMPP with PHP 8.2 or higher.</strong></p>
+                <div class="wiz-tip" style="margin-bottom:18px;"><strong>⚠️ PHP version matters:</strong> Pagezy requires <strong>PHP 8.2+</strong>. When downloading XAMPP, look for a version labelled <strong>8.2.x</strong> or <strong>8.3.x</strong> — do not install 7.x or 8.0/8.1 versions.</div>
                 <div class="os-tabs">
                     <button class="os-tab active" onclick="switchOS(this,'os-win')">Windows</button>
                     <button class="os-tab" onclick="switchOS(this,'os-mac')">Mac</button>
                 </div>
                 <div class="os-tab-content active" id="os-win">
                     <ul class="wiz-list">
-                        <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Download <a href="https://www.apachefriends.org/download.html" target="_blank" style="color:#818CF8;font-weight:700;">XAMPP for Windows</a> (free, ~160 MB). Pick the latest version.</span></li>
+                        <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Download <a href="https://www.apachefriends.org/download.html" target="_blank" style="color:#818CF8;font-weight:700;">XAMPP for Windows</a> (free, ~160 MB). On the download page, pick the <strong>PHP 8.2.x</strong> version.</span></li>
                         <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Run the installer. Click <strong>Next → Next → Install</strong>. Leave all default settings as-is.<span class="note">If Windows shows a security warning, click "Allow" — it's safe.</span></span></li>
-                        <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Once installed, open the <strong>XAMPP Control Panel</strong>. Click <strong>Start</strong> next to <strong>Apache</strong> and <strong>MySQL</strong>. Both should turn green.</span></li>
+                        <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Open the <strong>XAMPP Control Panel</strong> → click <strong>Start</strong> next to <strong>Apache</strong> and <strong>MySQL</strong>. Both should turn green.</span></li>
+                        <li><span class="wiz-list-num">4</span><span class="wiz-list-text"><strong>Enable mod_rewrite</strong> (needed for Pagezy URLs to work): In the Control Panel click <strong>Config</strong> next to Apache → open <strong>httpd.conf</strong> → find the line <code>#LoadModule rewrite_module</code> → remove the <code>#</code> at the start → save. Then click <strong>Stop → Start</strong> on Apache.<span class="note">Already uncommented (no #)? You're fine — skip this step.</span></span></li>
                     </ul>
                     <div style="background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--muted);margin-top:12px;">
-                        ✅ If you see green lights next to Apache and MySQL in the Control Panel, you're ready!
+                        ✅ Green lights next to Apache and MySQL in the Control Panel = you're ready!
                     </div>
                 </div>
                 <div class="os-tab-content" id="os-mac">
                     <ul class="wiz-list">
-                        <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Download <a href="https://www.apachefriends.org/download.html" target="_blank" style="color:#818CF8;font-weight:700;">XAMPP for macOS</a> (free, ~160 MB).</span></li>
+                        <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Download <a href="https://www.apachefriends.org/download.html" target="_blank" style="color:#818CF8;font-weight:700;">XAMPP for macOS</a> (free). Choose the <strong>PHP 8.2.x</strong> version on the download page.</span></li>
                         <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Open the downloaded <code>.dmg</code> file → drag XAMPP to your Applications folder.</span></li>
                         <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Open XAMPP from Applications → click <strong>Start</strong> next to <strong>Apache</strong> and <strong>MySQL</strong>.</span></li>
+                        <li><span class="wiz-list-num">4</span><span class="wiz-list-text">mod_rewrite is enabled by default on Mac XAMPP — no extra step needed.</span></li>
                     </ul>
                     <div style="background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--muted);margin-top:12px;">
-                        ✅ When both services are running, open your browser and go to <code>http://localhost</code> — you should see the XAMPP welcome page.
+                        ✅ Open your browser and go to <code>http://localhost</code> — you should see the XAMPP welcome page.
                     </div>
                 </div>
                 <div class="wiz-nav">
@@ -358,7 +361,7 @@ include 'includes/nav.php';
             <!-- Step 3: Put files in place -->
             <div class="wiz-card" data-step="2">
                 <span class="wiz-card-icon">📂</span>
-                <div class="wiz-step-label"><span>Step 3 of 6</span></div>
+                <div class="wiz-step-label"><span>Step 3 of 7</span></div>
                 <h2>Put the files in place</h2>
                 <p class="wiz-card-sub">Think of <strong>htdocs</strong> as XAMPP's website folder. Any folder you put there becomes a local website. We'll put Pagezy there now.</p>
                 <div class="os-tabs">
@@ -390,7 +393,7 @@ include 'includes/nav.php';
             <!-- Step 4: Create database via phpMyAdmin -->
             <div class="wiz-card" data-step="3">
                 <span class="wiz-card-icon">🗄️</span>
-                <div class="wiz-step-label"><span>Step 4 of 6</span></div>
+                <div class="wiz-step-label"><span>Step 4 of 7</span></div>
                 <h2>Create a database</h2>
                 <p class="wiz-card-sub">XAMPP includes <strong>phpMyAdmin</strong> — a visual tool to manage your database. No command line needed at all. Just click and type!</p>
                 <ul class="wiz-list">
@@ -411,45 +414,91 @@ include 'includes/nav.php';
             <!-- Step 5: Rename .env.example → .env, change ONE line -->
             <div class="wiz-card" data-step="4">
                 <span class="wiz-card-icon">📝</span>
-                <div class="wiz-step-label"><span>Step 5 of 6</span></div>
-                <h2>Quick config — just 2 clicks &amp; 1 word</h2>
-                <p class="wiz-card-sub">Pagezy needs to know your database name. You'll edit one line in a text file — that's it. Promise it's easier than it sounds!</p>
+                <div class="wiz-step-label"><span>Step 5 of 7</span></div>
+                <h2>Quick config — 3 minutes max</h2>
+                <p class="wiz-card-sub">Pagezy needs to know your database name. You'll edit one file — that's it. No coding needed.</p>
                 <ul class="wiz-list">
-                    <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Open your <strong>pagezy</strong> folder (<code>C:\xampp\htdocs\pagezy</code> on Windows, <code>/Applications/XAMPP/htdocs/pagezy</code> on Mac).</span></li>
-                    <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Find the file named <strong>.env.example</strong> → right-click it → <strong>Copy</strong> → <strong>Paste</strong> it in the same folder.<span class="note">You'll get a file called ".env.example - Copy" or similar.</span></span></li>
-                    <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Rename that copy to exactly: <strong>.env</strong><span class="note">On Windows you may need to enable "Show file extensions" — or just rename it in Notepad's Save As dialog.</span></span></li>
-                    <li><span class="wiz-list-num">4</span><span class="wiz-list-text">Open <strong>.env</strong> with Notepad (Windows) or TextEdit (Mac).</span></li>
-                    <li><span class="wiz-list-num">5</span><span class="wiz-list-text">Find the line that says <code>DB_DATABASE=laravel</code> — change <strong>laravel</strong> to <strong>pagezy</strong> so it reads:</span></li>
+                    <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Open your <strong>pagezy</strong> folder (<code>C:\xampp\htdocs\pagezy</code> on Windows, <code>/Applications/XAMPP/htdocs/pagezy</code> on Mac).<span class="note">On Windows: if you don't see <code>.env.example</code>, go to View → tick "Hidden items" in File Explorer.</span></span></li>
+                    <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Find the file named <strong>.env.example</strong> → right-click it → <strong>Copy</strong> → <strong>Paste</strong> → rename the copy to exactly: <strong>.env</strong><span class="note">Windows tip: open Notepad → File → Save As → navigate to the folder → type <code>.env</code> as the filename → Save. Then copy your .env.example content into it.</span></span></li>
+                    <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Open <strong>.env</strong> with Notepad (Windows) or TextEdit (Mac). Find and update these lines:</span></li>
                 </ul>
-                <div class="wiz-code">DB_DATABASE=pagezy</div>
+                <div class="wiz-code">DB_DATABASE=pagezy<br>DB_USERNAME=root<br>DB_PASSWORD=</div>
                 <ul class="wiz-list">
-                    <li><span class="wiz-list-num">6</span><span class="wiz-list-text">Save the file (<kbd>Ctrl+S</kbd> on Windows, <kbd>Cmd+S</kbd> on Mac). Close Notepad.</span></li>
+                    <li><span class="wiz-list-num">4</span><span class="wiz-list-text">Save the file (<kbd>Ctrl+S</kbd> on Windows, <kbd>Cmd+S</kbd> on Mac).</span></li>
                 </ul>
-                <div class="wiz-tip"><strong>Leave everything else as-is.</strong> XAMPP's default username is <code>root</code> and has no password — the .env file already has these defaults set.</div>
+                <div class="wiz-tip"><strong>XAMPP defaults:</strong> username is <code>root</code> and password is blank (empty) — already set in the .env file. Just update <code>DB_DATABASE</code> to match the name you created in phpMyAdmin.</div>
+                <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:12px 16px;font-size:13px;color:#FCA5A5;margin-top:12px;">
+                    <strong>⚠️ Do NOT include the vendor/ folder manually or run composer install</strong> — Pagezy's ZIP already includes everything you need. The installer handles the rest.
+                </div>
                 <div class="wiz-nav">
                     <button class="wiz-btn-prev" onclick="changeStep(-1)">← Previous</button>
                     <button class="wiz-btn-next" onclick="changeStep(1)">Config file is ready →</button>
                 </div>
             </div>
 
-            <!-- Step 6: Done! Visit installer -->
-            <div class="wiz-card done-card" data-step="5">
-                <span class="wiz-card-icon">🎉</span>
-                <h2>Last step — run the installer!</h2>
-                <p class="wiz-card-sub done-sub">The web installer sets up everything else automatically — no commands, no technical stuff. Just fill in a short form and you're live.</p>
-                <div style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:20px 24px;text-align:left;margin-bottom:24px;">
-                    <ul class="wiz-list" style="margin-bottom:0;">
-                        <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Open your browser → go to: <code>http://localhost/pagezy/public/setup</code></span></li>
-                        <li><span class="wiz-list-num">2</span><span class="wiz-list-text">The installer will ask for your <strong>site name</strong> and <strong>admin password</strong>. Fill those in.</span></li>
-                        <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Click <strong>Install Pagezy</strong> — it sets up all the database tables automatically.</span></li>
-                        <li><span class="wiz-list-num">4</span><span class="wiz-list-text">You'll be redirected to your admin panel. <strong>You're done!</strong> 🚀</span></li>
-                    </ul>
+            <!-- Step 6: Run installer -->
+            <div class="wiz-card" data-step="5">
+                <span class="wiz-card-icon">⚡</span>
+                <div class="wiz-step-label"><span>Step 6 of 7</span></div>
+                <h2>Run the installer</h2>
+                <p class="wiz-card-sub">The web installer sets up everything automatically — database tables, admin account, app key. No commands needed.</p>
+                <ul class="wiz-list">
+                    <li><span class="wiz-list-num">1</span><span class="wiz-list-text">Open your browser → go to: <code>http://localhost/pagezy/public/setup</code></span></li>
+                    <li><span class="wiz-list-num">2</span><span class="wiz-list-text">Step 1 (Requirements) will run — all items should be ✅ green. If you see a warning about <strong>fileinfo</strong> that's OK — it won't block installation.</span></li>
+                    <li><span class="wiz-list-num">3</span><span class="wiz-list-text">Step 2 (Database) — enter:<br>
+                        Host: <code>127.0.0.1</code> &nbsp;·&nbsp; Port: <code>3306</code> &nbsp;·&nbsp; Database: <code>pagezy</code> &nbsp;·&nbsp; User: <code>root</code> &nbsp;·&nbsp; Password: <em>(leave blank)</em></span></li>
+                    <li><span class="wiz-list-num">4</span><span class="wiz-list-text">Step 3 — set your <strong>site name</strong> and <strong>admin email/password</strong>.</span></li>
+                    <li><span class="wiz-list-num">5</span><span class="wiz-list-text">You'll be redirected to your admin panel. Done! 🚀<span class="note">The /setup page locks itself after installation — no one can run it again.</span></span></li>
+                </ul>
+                <div class="wiz-nav">
+                    <button class="wiz-btn-prev" onclick="changeStep(-1)">← Previous</button>
+                    <button class="wiz-btn-next" onclick="changeStep(1)">I'm in the admin panel →</button>
                 </div>
-                <div class="done-links">
+            </div>
+
+            <!-- Step 7: Done + Troubleshooting -->
+            <div class="wiz-card done-card" data-step="6">
+                <span class="wiz-card-icon">🎉</span>
+                <h2>You're all set!</h2>
+                <p class="wiz-card-sub done-sub">Pagezy CMS is running locally. Build your site, test everything, then deploy to a live server when you're ready.</p>
+                <div class="done-links" style="margin-bottom:32px;">
+                    <a href="http://localhost/pagezy/public/admin" target="_blank" class="done-primary">Open admin panel ↗</a>
                     <button onclick="resetWizard()" class="done-secondary" style="border:none;cursor:pointer;">← Start over</button>
                 </div>
-                <div style="margin-top:28px;padding-top:20px;border-top:1px solid rgba(255,255,255,.07);font-size:13px;color:var(--muted);">
-                    Stuck on any step? <a href="/contact.php" style="color:#818CF8;">Contact us</a> — we'll help you personally, no judgment!
+
+                <!-- Common errors accordion -->
+                <div style="text-align:left;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px 24px;">
+                    <div style="font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#818CF8;margin-bottom:16px;">Common issues &amp; fixes</div>
+                    <div style="display:flex;flex-direction:column;gap:12px;font-size:13px;">
+                        <details style="background:rgba(255,255,255,.03);border-radius:8px;padding:12px 14px;">
+                            <summary style="cursor:pointer;font-weight:700;color:#fff;list-style:none;">🔴 "404 Not Found" on all pages</summary>
+                            <p style="margin:8px 0 0;color:var(--muted);line-height:1.6;">Apache mod_rewrite isn't enabled. In XAMPP Control Panel → Config → httpd.conf, find <code>#LoadModule rewrite_module</code> and remove the <code>#</code>. Restart Apache.</p>
+                        </details>
+                        <details style="background:rgba(255,255,255,.03);border-radius:8px;padding:12px 14px;">
+                            <summary style="cursor:pointer;font-weight:700;color:#fff;list-style:none;">🔴 "PHP version" error or class not found errors</summary>
+                            <p style="margin:8px 0 0;color:var(--muted);line-height:1.6;">Your XAMPP PHP is too old. Pagezy needs PHP 8.2+. Download XAMPP 8.2.x from apachefriends.org and reinstall.</p>
+                        </details>
+                        <details style="background:rgba(255,255,255,.03);border-radius:8px;padding:12px 14px;">
+                            <summary style="cursor:pointer;font-weight:700;color:#fff;list-style:none;">🔴 "Access denied for user root" database error</summary>
+                            <p style="margin:8px 0 0;color:var(--muted);line-height:1.6;">In the installer database step, make sure Host is <code>127.0.0.1</code> (not <code>localhost</code>). Leave password blank. Username: <code>root</code>.</p>
+                        </details>
+                        <details style="background:rgba(255,255,255,.03);border-radius:8px;padding:12px 14px;">
+                            <summary style="cursor:pointer;font-weight:700;color:#fff;list-style:none;">🔴 Can't find the .env.example file on Windows</summary>
+                            <p style="margin:8px 0 0;color:var(--muted);line-height:1.6;">In File Explorer → View → tick <strong>Hidden items</strong>. Files starting with a dot are hidden by default on Windows.</p>
+                        </details>
+                        <details style="background:rgba(255,255,255,.03);border-radius:8px;padding:12px 14px;">
+                            <summary style="cursor:pointer;font-weight:700;color:#fff;list-style:none;">🔴 Port 3306 already in use / MySQL won't start</summary>
+                            <p style="margin:8px 0 0;color:var(--muted);line-height:1.6;">Another MySQL is running on your computer. In XAMPP → Config (MySQL) → change port to <code>3307</code>. Then in your .env set <code>DB_PORT=3307</code>.</p>
+                        </details>
+                        <details style="background:rgba(255,255,255,.03);border-radius:8px;padding:12px 14px;">
+                            <summary style="cursor:pointer;font-weight:700;color:#fff;list-style:none;">🔴 White screen or "500 Internal Server Error"</summary>
+                            <p style="margin:8px 0 0;color:var(--muted);line-height:1.6;">Check that your .env file exists (not just .env.example). Also verify <code>storage/</code> and <code>bootstrap/cache/</code> folders have write permission (right-click → Properties → Security).</p>
+                        </details>
+                    </div>
+                </div>
+
+                <div style="margin-top:24px;font-size:13px;color:var(--muted);">
+                    Still stuck? <a href="/contact.php" style="color:#818CF8;">Contact us</a> — we'll help personally, no judgment!
                 </div>
             </div>
 
@@ -492,13 +541,15 @@ include 'includes/nav.php';
                     <h2>System Requirements</h2>
                     <p>Pagezy is designed to run on any standard PHP host — including shared cPanel hosting.</p>
                     <ul>
-                        <li><strong>PHP:</strong> 8.1 or higher</li>
+                        <li><strong>PHP:</strong> 8.2 or higher (8.3 recommended)</li>
                         <li><strong>MySQL:</strong> 5.7+ or MariaDB 10.3+</li>
-                        <li><strong>Web server:</strong> Apache (with mod_rewrite) or Nginx</li>
+                        <li><strong>Web server:</strong> Apache (with mod_rewrite enabled) or Nginx</li>
                         <li><strong>Disk space:</strong> Minimum 50 MB for core; more for media uploads</li>
-                        <li><strong>PHP extensions:</strong> PDO, pdo_mysql, mbstring, fileinfo, GD or Imagick</li>
+                        <li><strong>PHP extensions (required):</strong> PDO, pdo_mysql, mbstring, openssl, tokenizer, xml, ctype, json, bcmath, curl</li>
+                        <li><strong>PHP extensions (optional):</strong> fileinfo — needed for media file type detection; CMS works without it</li>
                     </ul>
-                    <p>No Composer, Node.js, or command-line access required. Works out of the box on shared hosting.</p>
+                    <p><strong>No Composer, Node.js, or command-line access required.</strong> The download ZIP includes all dependencies pre-installed. Works out of the box on shared cPanel hosting and XAMPP.</p>
+                    <p>For local development on XAMPP: download XAMPP with <strong>PHP 8.2.x</strong> specifically. Ensure mod_rewrite is enabled in Apache's httpd.conf.</p>
                 </section>
                 <section id="install">
                     <h2>Installation</h2>
@@ -545,7 +596,7 @@ var currentPath = '';
 var currentStep = 0;
 
 var serverSteps = ['Download','Check hosting','Create database','Upload files','Point domain','Run installer','Done!'];
-var localSteps  = ['Download','Install XAMPP','Put files in place','Create database','Config file','Run installer'];
+var localSteps  = ['Download','Install XAMPP','Put files in place','Create database','Config file','Run installer','Done!'];
 
 function startWizard(path) {
     currentPath = path;

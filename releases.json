@@ -1,0 +1,8 @@
+[
+  {
+    "version": "1.0.1",
+    "notes": "Fixed media upload on shared hosting. Storage symlink auto-created on install. WordPress-style one-click updates. Smoother installer with auto APP_KEY generation.",
+    "download_url": "https://pagezy.io/downloads/pagezy-cms-latest.zip",
+    "released_at": "2026-06-24"
+  }
+]
