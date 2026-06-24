@@ -1,7 +1,7 @@
 [
   {
-    "version": "1.0.1",
-    "notes": "Fixed media upload on shared hosting. Storage symlink auto-created on install. WordPress-style one-click updates. Smoother installer with auto APP_KEY generation.",
+    "version": "1.0.2",
+    "notes": "Update progress overlay — shows live status and warns not to close the tab during updates.",
     "download_url": "https://pagezy.io/cms-download.php",
     "released_at": "2026-06-24"
   }
