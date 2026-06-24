@@ -1,7 +1,7 @@
 [
   {
-    "version": "1.0.2",
-    "notes": "Update progress overlay — shows live status and warns not to close the tab during updates.",
+    "version": "1.0.3",
+    "notes": "Verified end-to-end update flow. Auto-snapshot, ZIP download via cURL, progress overlay.",
     "download_url": "https://pagezy.io/cms-download.php",
     "released_at": "2026-06-24"
   }
