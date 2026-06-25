@@ -1,8 +1,8 @@
 [
   {
-    "version": "1.0.5",
-    "notes": "Bug reporter: screenshot captured before modal opens, upload image/video attachments, choose auto/upload/both modes.",
-    "download_url": "https://pagezy.io/cms-download.php",
+    "version": "1.0.7",
+    "notes": "Page module & FlexiBuilder bug fixes + stability improvements.",
+    "download_url": "https://pagezy.io/downloads/pagezy-cms-v1.0.7.zip",
     "released_at": "2026-06-25"
   }
 ]
