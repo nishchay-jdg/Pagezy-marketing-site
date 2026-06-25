@@ -1,8 +1,8 @@
 [
   {
-    "version": "1.0.3",
-    "notes": "Verified end-to-end update flow. Auto-snapshot, ZIP download via cURL, progress overlay.",
+    "version": "1.0.4",
+    "notes": "Bug reporting tool — floating 🐛 button on every admin page. Captures screenshot, URL, browser, user info. Bug inbox with status tracking.",
     "download_url": "https://pagezy.io/cms-download.php",
-    "released_at": "2026-06-24"
+    "released_at": "2026-06-25"
   }
 ]
