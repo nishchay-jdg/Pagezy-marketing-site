@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.1.0",
+    "notes": "Swiper.js slider builder, image upload fixes, and FlexiBuilder UX improvements.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-06-25"
+  },
+  {
     "version": "1.0.7",
     "notes": "Page module & FlexiBuilder bug fixes + stability improvements.",
     "download_url": "https://pagezy.io/cms-download.php",
