@@ -1,19 +1,25 @@
 [
   {
-    "version": "1.1.0",
-    "notes": "FlexiBuilder canvas/frontend color sync, HTML export fix, Search & Replace tool, and stability improvements.\n\n**Fixed:**\n- FlexiBuilder canvas now matches the live frontend — brand color tokens (--color-dark-mid, --hero-bg gradients) correctly injected into canvas\n- HTML export now includes theme.css, brand CSS variables, and Google Fonts so downloaded files match the live site\n- FlexiBuilder CSS blank on hard refresh fully resolved (background:var() parser fix, _gjsRawCss merge strategy, gjs-project lossless round-trip)\n\n**New:**\n- Search & Replace tool — find text across all pages and posts, preview highlighted matches, replace selected fields in bulk",
+    "version": "1.2.0",
+    "notes": "Search & Replace tool, FlexiBuilder canvas colour sync, HTML export fix, and CSS persistence improvements.",
     "download_url": "https://pagezy.io/cms-download.php",
     "released_at": "2026-06-30"
   },
   {
+    "version": "1.1.0",
+    "notes": "Swiper.js slider builder, scheduled publishing, analytics, saved blocks, blog comments, image focal point, page duplicate.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-06-26"
+  },
+  {
     "version": "1.0.7",
-    "notes": "Swiper.js slider builder, image upload fixes, and FlexiBuilder UX improvements.",
+    "notes": "FlexiBuilder stability fix, UX improvements, author display name override.",
     "download_url": "https://pagezy.io/cms-download.php",
     "released_at": "2026-06-25"
   },
   {
     "version": "1.0.6",
-    "notes": "Page module & FlexiBuilder bug fixes + stability improvements.",
+    "notes": "Page module & FlexiBuilder bug fixes.",
     "download_url": "https://pagezy.io/cms-download.php",
     "released_at": "2026-06-24"
   }
