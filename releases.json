@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.3.1",
+    "notes": "Bug fix: custom font upload (.otf/.ttf files now accepted). New: upload multiple font weights/styles (Regular, Bold, Italic) under one family name.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-03"
+  },
+  {
     "version": "1.3.0",
     "notes": "MySQL database backup (pure PHP, no exec needed), Search & Replace tool, FlexiBuilder canvas colour sync, and HTML export fix.",
     "download_url": "https://pagezy.io/cms-download.php",
