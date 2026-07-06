@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.4.1",
+    "notes": "Hotfix: fixes a 500 error on all frontend pages after the v1.4.0 update. Update immediately if you're seeing an Internal Server Error on your site.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-06"
+  },
+  {
     "version": "1.4.0",
     "notes": "New: Site Migration — export your entire site to a single .pagezy file and import it on any Pagezy server in one click (pages, posts, media, settings, menus, and more). New: HTML/ZIP Import into FlexiBuilder — upload any HTML template or ZIP archive directly into the page builder, images auto-uploaded to Media Library. New: Pages Quick Edit — edit title, slug, template, and status inline without opening the full editor. New: Button brand controls — set primary and secondary button colours in Brand & Design. Fixed: Deals settings crash, pages flash messages.",
     "download_url": "https://pagezy.io/cms-download.php",
