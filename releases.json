@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.4.6",
+    "notes": "Fixed: {{section:name}} shortcode now renders correctly on frontend pages and posts. New: Sections list now auto-displays the shortcode for each section with a Copy button — no more guessing the slug.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-06"
+  },
+  {
     "version": "1.4.5",
     "notes": "New: {{section:name}} shortcode — embed any Section template into pages, posts, or global templates. Fixed: Footer Code and Header Code now auto-execute raw JavaScript. Clearer Code Injection field hints.",
     "download_url": "https://pagezy.io/cms-download.php",
