@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.4.2",
+    "notes": "Hotfix: fixes button styles appearing broken after the v1.4.0 update due to browsers caching the old CSS. Update immediately if buttons on your site look broken.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-06"
+  },
+  {
     "version": "1.4.1",
     "notes": "Hotfix: fixes a 500 error on all frontend pages after the v1.4.0 update. Update immediately if you're seeing an Internal Server Error on your site.",
     "download_url": "https://pagezy.io/cms-download.php",
