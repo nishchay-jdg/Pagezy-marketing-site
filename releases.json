@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.4.4",
+    "notes": "Hotfix: Footer Code and Header Code now auto-execute raw JavaScript without needing <script> tags. Also: Search & Replace now searches per-page Custom CSS and Custom JS fields.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-06"
+  },
+  {
     "version": "1.4.3",
     "notes": "Hotfix: Custom Code JavaScript now supports $() and $$() helpers, matching browser DevTools behaviour. Scripts using $$() were failing silently before this update.",
     "download_url": "https://pagezy.io/cms-download.php",
