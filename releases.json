@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.4.9",
+    "notes": "Fixed: buttons used without the base btn class (common in FlexiBuilder pages) now render with correct padding, border-radius, and layout — not just colour.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-06"
+  },
+  {
     "version": "1.4.8",
     "notes": "Fixed: button text underline showing on pages that load Bootstrap CSS. All button variants now correctly suppress text-decoration regardless of other stylesheets on the page.",
     "download_url": "https://pagezy.io/cms-download.php",
