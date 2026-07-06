@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.4.7",
+    "notes": "Fixed: Custom JS syntax errors no longer silently break the entire page. A clear console error is shown instead, and all other page scripts continue running normally.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-06"
+  },
+  {
     "version": "1.4.6",
     "notes": "Fixed: {{section:name}} shortcode now renders correctly on frontend pages and posts. New: Sections list now auto-displays the shortcode for each section with a Copy button — no more guessing the slug.",
     "download_url": "https://pagezy.io/cms-download.php",
