@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.5.5",
+    "notes": "Bug Reports sidebar link and floating button are now hidden when SMTP is not configured in Site Settings — no point showing the feature if emails can't be sent.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-07"
+  },
+  {
     "version": "1.5.4",
     "notes": "Fix: CMS update progress overlay now shows correctly — clicking \"Update Now\" now displays a full-screen step-by-step progress overlay instead of just the browser tab spinner.",
     "download_url": "https://pagezy.io/cms-download.php",
