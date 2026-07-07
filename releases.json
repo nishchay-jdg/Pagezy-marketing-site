@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.6.2",
+    "notes": "Hotfix: Media Library was crashing with a 500 error on installs where the pages table doesn't have the featured_image column yet. Update immediately if you're seeing this error.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-07"
+  },
+  {
     "version": "1.6.1",
     "notes": "Fix: import no longer crashes when the export file contains columns that don't exist on the destination database (schema version mismatch between stage and live). Unknown columns are silently skipped. Also adds a full-screen loading overlay during import.",
     "download_url": "https://pagezy.io/cms-download.php",
