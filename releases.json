@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.6.0",
+    "notes": "Import now includes an optional Admin Users module. Unchecked by default — tick it only if you want to bring over admin accounts from the stage site. Your own login is always protected: even in Overwrite mode your account is never deleted or replaced.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-07"
+  },
+  {
     "version": "1.5.9",
     "notes": "Migration hardened for stage→live flow: URL rewriting now covers custom_js, site_variables, and block thumbnails. User IDs reassigned to importing admin. Cache cleared automatically. Server upload limit shown in drop zone. Better error messages for 413/419 responses.",
     "download_url": "https://pagezy.io/cms-download.php",
