@@ -1,5 +1,29 @@
 [
   {
+    "version": "1.5.3",
+    "notes": "Sidebar reorganised (7 clean sections, no duplicate labels). Age Gate moved to Global Hub. All SEO tools merged into \"All Tools\". Broken Link Checker now detects internal/relative links and correctly shows success state after a clean scan. Analytics chart height fixed. CMS update checker uses local RELEASES.json as authoritative version source. Sidebar brand name now reads from Site Settings.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-07"
+  },
+  {
+    "version": "1.5.2",
+    "notes": "New: SEO Audit — instant scoring of all pages/posts for title, description, H1, alt text, OG image. New: Broken Link Checker — AJAX-driven scan with live progress, results saved to DB. New: Page Speed & Web Vitals — local checks + optional Google Lighthouse scores (LCP, CLS, FCP, TBT).",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-06"
+  },
+  {
+    "version": "1.5.1",
+    "notes": "New: Analytics dashboard with 30-day chart, top pages/posts, and GA4/GTM/GSC status links. New: Google Search Console verification meta tag field. Daily view tracking now records per-day history for historical charts.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-06"
+  },
+  {
+    "version": "1.5.0",
+    "notes": "New: {{section:slug}} shortcodes now show a live preview placeholder in FlexiBuilder canvas instead of raw text. The shortcode is preserved on save so the frontend still renders the full section.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-06"
+  },
+  {
     "version": "1.4.9",
     "notes": "Fixed: buttons used without the base btn class (common in FlexiBuilder pages) now render with correct padding, border-radius, and layout — not just colour.",
     "download_url": "https://pagezy.io/cms-download.php",
