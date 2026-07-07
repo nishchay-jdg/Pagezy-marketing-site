@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.6.4",
+    "notes": "Fix: \"Fix Image Storage\" button now has 3 fallback methods — works even on cPanel servers where symlink() is disabled. Falls back to a .htaccess rewrite rule that serves storage files without needing a symlink.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-07"
+  },
+  {
     "version": "1.6.3",
     "notes": "New: \"Fix Image Storage\" button in Media Library — click it if your uploaded images show as broken. Runs the storage symlink command automatically and reloads the page on success.",
     "download_url": "https://pagezy.io/cms-download.php",
