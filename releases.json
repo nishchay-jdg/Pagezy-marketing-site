@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.6.1",
+    "notes": "Fix: import no longer crashes when the export file contains columns that don't exist on the destination database (schema version mismatch between stage and live). Unknown columns are silently skipped. Also adds a full-screen loading overlay during import.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-07"
+  },
+  {
     "version": "1.6.0",
     "notes": "Import now includes an optional Admin Users module. Unchecked by default — tick it only if you want to bring over admin accounts from the stage site. Your own login is always protected: even in Overwrite mode your account is never deleted or replaced.",
     "download_url": "https://pagezy.io/cms-download.php",
