@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.6.3",
+    "notes": "New: \"Fix Image Storage\" button in Media Library — click it if your uploaded images show as broken. Runs the storage symlink command automatically and reloads the page on success.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-07"
+  },
+  {
     "version": "1.6.2",
     "notes": "Hotfix: Media Library was crashing with a 500 error on installs where the pages table doesn't have the featured_image column yet. Update immediately if you're seeing this error.",
     "download_url": "https://pagezy.io/cms-download.php",
