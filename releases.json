@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.5.8",
+    "notes": "Fix: migration import no longer destroys data if it fails mid-way (TRUNCATE → DELETE, fully transactional). Warning shown when importing Settings with Overwrite mode (SMTP and admin email will be replaced).",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-07"
+  },
+  {
     "version": "1.5.7",
     "notes": "Fix: bug report screenshots now display correctly on cPanel. Fix: bug reports now forward to the central hub (CSRF was blocking the API endpoint).",
     "download_url": "https://pagezy.io/cms-download.php",
