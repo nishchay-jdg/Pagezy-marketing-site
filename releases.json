@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.6.6",
+    "notes": "Improved: \"Fix Image Storage\" button now uses a PHP file-server as its final fallback — works on cPanel servers where Apache ignores FollowSymLinks even when it's in .htaccess.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-07"
+  },
+  {
     "version": "1.6.5",
     "notes": "Hotfix: Media images were 404 on cPanel even with a valid storage symlink. Fixed by adding Options +FollowSymLinks to public/.htaccess — cPanel Apache disables symlink-following by default.",
     "download_url": "https://pagezy.io/cms-download.php",
