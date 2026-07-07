@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.5.6",
+    "notes": "Bug reports now work without SMTP — reports are forwarded to the central Pagezy hub via a secure API. Bug button always visible. Source site badge on each report. New public POST /api/bug-report endpoint.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-07"
+  },
+  {
     "version": "1.5.5",
     "notes": "Bug Reports sidebar link and floating button are now hidden when SMTP is not configured in Site Settings — no point showing the feature if emails can't be sent.",
     "download_url": "https://pagezy.io/cms-download.php",
