@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.5.9",
+    "notes": "Migration hardened for stage→live flow: URL rewriting now covers custom_js, site_variables, and block thumbnails. User IDs reassigned to importing admin. Cache cleared automatically. Server upload limit shown in drop zone. Better error messages for 413/419 responses.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-07"
+  },
+  {
     "version": "1.5.8",
     "notes": "Fix: migration import no longer destroys data if it fails mid-way (TRUNCATE → DELETE, fully transactional). Warning shown when importing Settings with Overwrite mode (SMTP and admin email will be replaced).",
     "download_url": "https://pagezy.io/cms-download.php",
