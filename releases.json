@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.6.7",
+    "notes": "Fix: Age Gate FlexiBuilder save 500 error (DB column expanded to LONGTEXT — run php artisan migrate after update). Fix: FlexiBuilder back button now saves before navigating. Fix: FlexiBuilder autosave now writes to DB every 30 seconds. Fix: Age Gate Custom HTML editor blank (replaced with native textarea). Fix: AVIF image uploads now accepted. Fix: button { cursor: pointer } added to theme.css. Fix: Ctrl+Z / Ctrl+Y undo & redo wired to FlexiBuilder. New: Theme CSS and Theme JS 3-mode control in Site Settings — Load normally / Custom (edit inline) / Disabled. New: FlexiBuilder :hover / :focus / :active state switcher in toolbar. Improvement: editor type icons replaced with SVG (was emoji, broken on Windows). Improvement: Swiper console logs removed.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-08"
+  },
+  {
     "version": "1.6.6",
     "notes": "Improved: \"Fix Image Storage\" button now uses a PHP file-server as its final fallback — works on cPanel servers where Apache ignores FollowSymLinks even when it's in .htaccess.",
     "download_url": "https://pagezy.io/cms-download.php",
