@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.6.9",
+    "notes": "Fix: Global Sections now render with correct colours and styles on all pages — CSS is bundled at save time (including brand variables) and baked into inline styles so they work everywhere, even when added to the same page they were built on. Fix: Ctrl+Z / Ctrl+Y undo and redo now work correctly inside the FlexiBuilder canvas. Fix: Background CSS — added a free-text Background CSS field in the Style Manager for gradients and var() references; background:var() is now automatically normalised to background-color:var() so GrapeJS no longer drops it. Fix: Import HTML — relative image filenames (e.g. banner.jpg) are now automatically matched against your Media Library and replaced with full URLs on import. Fix: Import HTML — imported CSS styles now correctly appear in the Style Manager when you select elements (delay increased to allow GrapeJS to fully process the import). Improvement: Removed the ★ Block toolbar button (use right-click → Save as Global Section instead).",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-09"
+  },
+  {
     "version": "1.6.8",
     "notes": "New: Image Path Resolver — paste HTML with bare filenames (e.g. hero.jpg) anywhere in the admin and they're automatically matched against your Media Library and replaced with the correct full URL. Works in Age Gate Custom HTML, Popup editor, FlexiBuilder HTML Import, and the new standalone Import HTML tool. New: Admin → Import HTML tool — dedicated page to paste raw HTML, resolve image paths, and copy cleaned output. New: Admin → Changelog — view full version history bundled with your install. Fix: FlexiBuilder style state selector (:hover / :focus / :active) moved from top toolbar into the Styles panel sidebar.",
     "download_url": "https://pagezy.io/cms-download.php",
