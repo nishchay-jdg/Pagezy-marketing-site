@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.3",
+    "notes": "New: FlexiBuilder — images can now be linked. Select any image to see the Link panel in the Settings tab: enter a URL to wrap the image in an <a> tag, edit the URL to update it, or click Remove Link to unwrap it. Open-in-new-tab supported. New: Navigation menus now support a Header Right location alongside Header Left (Primary Navigation) — create two independent header menus for left and right sides. Fix: Broken link checker now also scans navigation menu item URLs and Global Template (header/footer) HTML, not just page and post body content.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-13"
+  },
+  {
     "version": "1.7.2",
     "notes": "Fix: Broken link checker now detects internal broken links correctly — validates against CMS page/post slugs in the database instead of making HTTP requests (which followed server redirects and returned false 200s for links like /about.html). New: Popup settings — Custom CSS field, scoped automatically to each popup (.cms-popup-overlay, .cms-popup-box, .cms-popup-close are auto-prefixed with the popup ID). New: Popup settings — Close button customisation: position (Inside Top-Right, Inside Top-Left, Outside Top-Right), label/symbol (✕ ✖ × or custom text), icon colour, background colour and opacity. Fix: Adding an entrance animation to a popup no longer makes the popup content invisible — animations are now triggered explicitly when the popup opens (IntersectionObserver timing fix). Fix: Additional CSS panel in FlexiBuilder Settings tab was collapsing to zero height and disappearing — layout bug fixed, panel now appears reliably when any element is selected. Run php artisan migrate after updating.",
     "download_url": "https://pagezy.io/cms-download.php",
