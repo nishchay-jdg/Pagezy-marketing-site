@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.1",
+    "notes": "Hotfix: creating or saving a popup with the FlexiBuilder content type was throwing a 500 error (database column did not accept the 'flexibuilder' value). Run php artisan migrate after updating to apply the fix. Also adds a Link panel in FlexiBuilder Settings tab (URL + open-in-new-tab for buttons and links) and Age Gate quick-add class chips (age-gate-overlay, age-gate-modal, age-gate-yes, age-gate-no).",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-13"
+  },
+  {
     "version": "1.7.0",
     "notes": "New: Client Preview System — share a token-based preview link with clients so they can leave pin-drop comments anywhere on the page, reply in threads, mark issues as In Review or Resolved, and approve the design with one click. No login required for clients. New: FlexiBuilder Hover Effects — 12 presets (Lift, Scale Up, Glow, Shadow, BG Shift, Border Pop, Brighten, Dim, Rotate, Shrink, Fade, Underline) with duration control, active state, and a None option to remove effects cleanly. Fix: hover effects no longer stack — selecting a new effect or None now correctly replaces the previous one on the public page. Fix: clicking an element in FlexiBuilder now automatically opens the Settings tab. Fix: Gradient and FX toolbar buttons removed (were non-functional).",
     "download_url": "https://pagezy.io/cms-download.php",
