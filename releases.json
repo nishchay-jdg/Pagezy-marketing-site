@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.7",
+    "notes": "Fix: CSS duplication from site migration — pages imported via .pagezy backup that contained accumulated duplicate :root{} blocks now render with a single clean CSS block automatically. No re-save needed. Fix: CSS deduplication now runs at runtime in GlobalTemplateService so migrated sites are fixed immediately on next page load. New: CSS Cleanup Tool — one-click button on Tools → Changelog that permanently deduplicates CSS in all pages, posts, and popups in the database. New: Performance settings group in Global Settings — Minify CSS (strips comments and whitespace from inline style blocks), Minify JS (strips block comments and collapses whitespace in inline scripts), and Remove Unused CSS (drops class/ID rules with no matching element in the page HTML). All three default to Disabled and can be toggled independently.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-22"
+  },
+  {
     "version": "1.7.6",
     "notes": "Fix: CSS variables (e.g. --gradient-color) were duplicating on every FlexiBuilder save — each save added another copy of :root {} rules causing bloated CSS. Fix: Custom Code blocks were losing <script> tags on save/reload — GrapesJS was silently stripping scripts during HTML parsing. Fix: Custom Code blocks were losing <style> tags on save/reload — the page-level style extraction was incorrectly removing styles that belonged to Custom Code blocks. Fix: Global Elements (Headers, Footers) list page was throwing a 500 error for records where updated_at was null. New: Blog Banner — Advanced panel with Custom Class, Custom ID, Custom CSS, and Custom HTML fields for full banner customisation without touching theme files.",
     "download_url": "https://pagezy.io/cms-download.php",
