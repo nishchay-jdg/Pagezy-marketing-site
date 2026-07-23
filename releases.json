@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.8",
+    "notes": "Fix: FlexiBuilder's Content editor (the text/heading Settings panel) was rendering typed HTML like <br> and <span> as literal escaped text instead of real markup, and pressing Enter for a new line had no visual effect — content is now parsed as real HTML and line breaks are preserved. Fix: reselecting a component that already had rich formatting (bold, links, etc.) showed plain unformatted text in the Content panel, which could silently erase that formatting on the next edit — content now round-trips correctly. Fix: a database migration for the Deals multi-day feature used a column type rejected by strict MySQL installs (it only worked on MariaDB, which most cPanel hosts use by default) — fresh installs on MySQL no longer fail during setup.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-23"
+  },
+  {
     "version": "1.7.7",
     "notes": "Fix: CSS duplication from site migration — pages imported via .pagezy backup that contained accumulated duplicate :root{} blocks now render with a single clean CSS block automatically. No re-save needed. Fix: CSS deduplication now runs at runtime in GlobalTemplateService so migrated sites are fixed immediately on next page load. New: CSS Cleanup Tool — one-click button on Tools → Changelog that permanently deduplicates CSS in all pages, posts, and popups in the database. New: Performance settings group in Global Settings — Minify CSS (strips comments and whitespace from inline style blocks), Minify JS (strips block comments and collapses whitespace in inline scripts), and Remove Unused CSS (drops class/ID rules with no matching element in the page HTML). All three default to Disabled and can be toggled independently.",
     "download_url": "https://pagezy.io/cms-download.php",
