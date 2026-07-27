@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.9",
+    "notes": "New: Blog Settings — a \"Comment form on posts\" toggle in Single Post Elements lets you turn the comments section (existing comments and the submission form) off entirely for a post's single page. Fix: the comments section and form now have proper CSS classes (.post-comments, .comment-form, .comment-item, etc.) so they can be custom-styled — previously there was no class or ID to hook into. Fix: saving a blog post with an excerpt between 256-500 characters caused a server error instead of saving — the database column was too small for the validation rule that allowed it. Fixed the column size and added a live character counter on the Excerpt field so authors see the limit as they type. Fix: the Age Gate's \"Are you 21+?\" heading was marked up as an <h2>, creating a duplicate, out-of-place heading on every single page of the site (bad for SEO). It's now a styled paragraph instead, with no visual change.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-27"
+  },
+  {
     "version": "1.7.8",
     "notes": "Fix: FlexiBuilder's Content editor (the text/heading Settings panel) was rendering typed HTML like <br> and <span> as literal escaped text instead of real markup, and pressing Enter for a new line had no visual effect — content is now parsed as real HTML and line breaks are preserved. Fix: reselecting a component that already had rich formatting (bold, links, etc.) showed plain unformatted text in the Content panel, which could silently erase that formatting on the next edit — content now round-trips correctly. Fix: a database migration for the Deals multi-day feature used a column type rejected by strict MySQL installs (it only worked on MariaDB, which most cPanel hosts use by default) — fresh installs on MySQL no longer fail during setup.",
     "download_url": "https://pagezy.io/cms-download.php",
