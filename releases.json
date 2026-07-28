@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.11",
+    "notes": "New: llms.txt support — your site now serves a curated summary for AI/LLM crawlers at yourdomain.com/llms.txt, following the emerging llms.txt convention. It's auto-generated from your site name, tagline, description, and published pages/posts, or you can write fully custom content instead. Configure it in Site Settings > SEO, with an Enabled/Disabled toggle and an optional custom content field.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-28"
+  },
+  {
     "version": "1.7.10",
     "notes": "New: Blog Settings > SEO & Social now has a Schema Markup field for the blog listing page, matching the JSON-LD option already available on individual posts and pages. Fix: JSON-LD schema markup (Schema Markup field) on posts and pages was rendering HTML-escaped quotes instead of real ones, producing invalid structured data that search engines couldn't parse correctly — this has been broken since the feature was introduced and is now fixed across posts, pages, and the new blog listing field.",
     "download_url": "https://pagezy.io/cms-download.php",
