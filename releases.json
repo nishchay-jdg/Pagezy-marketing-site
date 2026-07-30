@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.12",
+    "notes": "New: FlexiBuilder's Blocks panel now has a search box, WordPress-style — filter the full block library by name instead of scrolling through categories, with results updating as you type.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-07-30"
+  },
+  {
     "version": "1.7.11",
     "notes": "New: llms.txt support — your site now serves a curated summary for AI/LLM crawlers at yourdomain.com/llms.txt, following the emerging llms.txt convention. It's auto-generated from your site name, tagline, description, and published pages/posts, or you can write fully custom content instead. Configure it in Site Settings > SEO, with an Enabled/Disabled toggle and an optional custom content field.",
     "download_url": "https://pagezy.io/cms-download.php",
