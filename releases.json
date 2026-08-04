@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.13",
+    "notes": "New: Hide the age gate on specific pages or posts — open any Page or Blog Post, go to SEO > Advanced, and check \"Hide Age Gate\" (no Custom JS needed). There's also a blanket \"Hide on all blog content\" toggle in Site Settings > Age Gate to exclude the whole blog section in one switch. New: Parent Page support — pages can now nest under one another, producing URLs like /specials/piner-road. Pick a parent from the new dropdown on any page, and the full URL is generated automatically; renaming a parent's slug cascades to every child page's URL, and the Pages list shows the hierarchy at a glance.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-08-04"
+  },
+  {
     "version": "1.7.12",
     "notes": "New: FlexiBuilder's Blocks panel now has a search box, WordPress-style — filter the full block library by name instead of scrolling through categories, with results updating as you type.",
     "download_url": "https://pagezy.io/cms-download.php",
