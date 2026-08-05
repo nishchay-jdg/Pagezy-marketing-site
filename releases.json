@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.14",
+    "notes": "Fix: Form Builder confirmation messages no longer redirect to the homepage after submission in some browsing conditions — the form now carries its own page URL explicitly instead of relying on the browser history. Fix: form notification emails that were silently skipped due to an invalid recipient address now log a clear warning instead of failing with no trace. Fix: requesting a page with a trailing slash (e.g. /about/) no longer redirects to a URL exposing the /public/ folder. New: every page URL now automatically resolves with a trailing slash (/about becomes /about/) for consistency, while the admin panel, static assets, and files like sitemap.xml/llms.txt/robots.txt are unaffected. New: Site Settings > 404 Page now has a \"Hide Age Gate\" option, using the same per-page exclusion already available for Pages and Posts.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-08-05"
+  },
+  {
     "version": "1.7.13",
     "notes": "New: Hide the age gate on specific pages or posts — open any Page or Blog Post, go to SEO > Advanced, and check \"Hide Age Gate\" (no Custom JS needed). There's also a blanket \"Hide on all blog content\" toggle in Site Settings > Age Gate to exclude the whole blog section in one switch. New: Parent Page support — pages can now nest under one another, producing URLs like /specials/piner-road. Pick a parent from the new dropdown on any page, and the full URL is generated automatically; renaming a parent's slug cascades to every child page's URL, and the Pages list shows the hierarchy at a glance.",
     "download_url": "https://pagezy.io/cms-download.php",
