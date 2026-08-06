@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.15",
+    "notes": "Fix: on sites running behind a reverse proxy or SSL-terminating layer (common on cPanel and behind CDNs like Cloudflare), the app couldn't tell requests were HTTPS, which could corrupt generated URLs — including the previous release's form confirmation redirect. The app now correctly trusts standard forwarded-proto headers. Fix: form notification emails crashed silently (no email sent, no visible error) whenever a notification's From Name, From Email, or Email Body was left blank in the Form Builder — these now correctly fall back to your site's default sender instead of erroring.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-08-06"
+  },
+  {
     "version": "1.7.14",
     "notes": "Fix: Form Builder confirmation messages no longer redirect to the homepage after submission in some browsing conditions — the form now carries its own page URL explicitly instead of relying on the browser history. Fix: form notification emails that were silently skipped due to an invalid recipient address now log a clear warning instead of failing with no trace. Fix: requesting a page with a trailing slash (e.g. /about/) no longer redirects to a URL exposing the /public/ folder. New: every page URL now automatically resolves with a trailing slash (/about becomes /about/) for consistency, while the admin panel, static assets, and files like sitemap.xml/llms.txt/robots.txt are unaffected. New: Site Settings > 404 Page now has a \"Hide Age Gate\" option, using the same per-page exclusion already available for Pages and Posts.",
     "download_url": "https://pagezy.io/cms-download.php",
