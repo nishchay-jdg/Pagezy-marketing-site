@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.19",
+    "notes": "New: Blog Posts can now drop the \"/blog/\" prefix from their URL, either per-post (a new checkbox in the Publish panel) or all at once via a new toggle in Blog Settings that applies to every existing post immediately while still letting individual posts opt back in. New: Pages with a parent can now hide the parent's slug from their own URL (e.g. /parent/child becomes /child) while staying organized under that parent in the admin panel. Both changes redirect old URLs to the new ones automatically in either direction, so nothing that's already been shared or indexed breaks.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-08-14"
+  },
+  {
     "version": "1.7.18",
     "notes": "Fix: the browser tab/search-result title always had \" — Your Site Name\" appended, even when a page's own SEO Title was set, with no way to turn it off — titles now render exactly as configured (SEO Title, or the page's own title as a fallback), with nothing forced onto the end. Fix: the Publish Date field on Pages and Blog Posts was only shown when Status was set to \"Scheduled\" — for Draft or Published content there was no way to see or edit the date, so backdating a post wasn't possible from the UI. The field is now always visible for every status; only Scheduled still requires a future date. Fix: importing a site via Site Migration could fail with a JSON parsing error on files over 100MB even when the server allowed larger uploads — the size check now matches your server's real upload limit, and this page now reports errors clearly instead of crashing. Fix: restoring a Backup zip on a real site (with a full media library) could fail with a bare server error because the restore process had no time/memory budget — it's now given the same generous budget as other long-running operations in the app.",
     "download_url": "https://pagezy.io/cms-download.php",
