@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.21",
+    "notes": "Fix: the CMS Updates page's \"Latest Version\" check could silently fall back to a bundled reference file that had gone stale for many past releases, reporting an install as up to date when a newer version actually existed. That reference file is now kept current with every release, and the fallback reads the correct data from it. Fix: admin pages could be cached by hosting-level caching (e.g. LiteSpeed LSCache, a CDN in front of the site) and keep showing stale content to some logged-in users even after a browser refresh or an incognito window. Admin responses now explicitly tell any cache never to store them.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-08-21"
+  },
+  {
     "version": "1.7.20",
     "notes": "Fix: media URLs created through FlexiBuilder or the Media Library baked in whatever domain was active at the moment an image was picked, so content copied from a staging subdomain to the live domain kept pointing at the old staging URL indefinitely. Media URLs are now stored relative to whatever domain is actually serving the page; Open Graph/Twitter share images still resolve to a full absolute URL as required by social platforms. New: FlexiBuilder now has a working \"Replace Image\" option — right-click or double-click any image on the canvas to swap it from the asset library. Fix: pages built with FlexiBuilder saved a stray extra <body> tag nested inside the real page body, which could confuse SEO crawlers and some CSS/JS selectors relying on document structure. New: Blog Settings now has a Canonical URL field (SEO & Social), matching the option already available on individual Pages and Posts.",
     "download_url": "https://pagezy.io/cms-download.php",
