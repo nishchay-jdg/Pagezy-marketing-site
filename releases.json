@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.22",
+    "notes": "Fix: sitemap.xml, post-sitemap.xml, and llms.txt listed every page/post URL without a trailing slash, even though visiting one of those URLs immediately redirects to its trailing-slash form — an unnecessary redirect hop that SEO crawlers flag directly. Fix: every internal link to a blog post (listing page, related posts, post cards) had the same issue, now fixed in one place. Fix: the default canonical/og:url tag was self-contradictory — a page served at /about/ reported its own canonical as /about (no slash). It now always matches the real, trailing-slashed URL a visitor is actually on.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-08-24"
+  },
+  {
     "version": "1.7.21",
     "notes": "Fix: the CMS Updates page's \"Latest Version\" check could silently fall back to a bundled reference file that had gone stale for many past releases, reporting an install as up to date when a newer version actually existed. That reference file is now kept current with every release, and the fallback reads the correct data from it. Fix: admin pages could be cached by hosting-level caching (e.g. LiteSpeed LSCache, a CDN in front of the site) and keep showing stale content to some logged-in users even after a browser refresh or an incognito window. Admin responses now explicitly tell any cache never to store them.",
     "download_url": "https://pagezy.io/cms-download.php",
