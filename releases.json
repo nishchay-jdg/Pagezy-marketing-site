@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.23",
+    "notes": "Fix: a page set as the site's homepage was reachable at both / and its own slug (e.g. /home/), rendering the same content at two indexable URLs with a self-contradictory canonical tag. The slug URL now redirects to root, matching how the equivalent case for blog posts already worked. Fix: sites using a custom-built age gate (FlexiBuilder Age Gate editor) had the built-in age gate silently running its own show/hide logic alongside the custom one, tracking consent under a separate, unrelated key. Since the custom gate never wrote to that key, the built-in one always concluded no consent was given and force-flashed its own overlay over the page on every navigation, even for already-verified visitors. The built-in age gate no longer runs at all when a custom one is in use.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-08-25"
+  },
+  {
     "version": "1.7.22",
     "notes": "Fix: sitemap.xml, post-sitemap.xml, and llms.txt listed every page/post URL without a trailing slash, even though visiting one of those URLs immediately redirects to its trailing-slash form — an unnecessary redirect hop that SEO crawlers flag directly. Fix: every internal link to a blog post (listing page, related posts, post cards) had the same issue, now fixed in one place. Fix: the default canonical/og:url tag was self-contradictory — a page served at /about/ reported its own canonical as /about (no slash). It now always matches the real, trailing-slashed URL a visitor is actually on.",
     "download_url": "https://pagezy.io/cms-download.php",
