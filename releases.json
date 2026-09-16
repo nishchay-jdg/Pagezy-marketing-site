@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.24",
+    "notes": "New: Accessibility Widget — a floating accessibility button can now be enabled per site (Global Elements > Accessibility Tools) letting visitors adjust text size, contrast, grayscale, link highlighting, cursor size, line height, and motion, with their choices remembered for their next visit. Positioning, theme, and accent color are all configurable. Wording is deliberately \"Accessibility Tools,\" not an ADA-compliance claim, with a disclaimer built into both the admin page and the widget itself. New: baseline accessibility improvements site-wide, including a \"Skip to main content\" link, visible keyboard focus outlines, and properly linked form field labels for screen readers. Fix: the Dashboard's Recent Posts table and the All Blogs list showed a scheduled post's creation date instead of its actual publish date, even though the editor always showed the correct date. Both now show the publish date.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-09-16"
+  },
+  {
     "version": "1.7.23",
     "notes": "Fix: a page set as the site's homepage was reachable at both / and its own slug (e.g. /home/), rendering the same content at two indexable URLs with a self-contradictory canonical tag. The slug URL now redirects to root, matching how the equivalent case for blog posts already worked. Fix: sites using a custom-built age gate (FlexiBuilder Age Gate editor) had the built-in age gate silently running its own show/hide logic alongside the custom one, tracking consent under a separate, unrelated key. Since the custom gate never wrote to that key, the built-in one always concluded no consent was given and force-flashed its own overlay over the page on every navigation, even for already-verified visitors. The built-in age gate no longer runs at all when a custom one is in use.",
     "download_url": "https://pagezy.io/cms-download.php",
