@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.8.0",
+    "notes": "New: Site Settings > General now has \"Force HTTPS\" and \"Force non-WWW\" toggles, enforced directly by the app instead of a hand-edited .htaccess rule. This was previously something site owners maintained manually in .htaccess, which meant it silently disappeared on every update. As real application settings, they ship with every release and can never be reset by an update again.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-09-17"
+  },
+  {
     "version": "1.7.25",
     "notes": "Fix: every CMS update silently overwrote a site's .htaccess (and public/.htaccess) with the default version bundled in that release, discarding any custom redirects, security rules, or hosting-specific tweaks made since install. Both files are now preserved across updates, the same way .env already is.",
     "download_url": "https://pagezy.io/cms-download.php",
