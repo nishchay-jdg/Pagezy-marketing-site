@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.7.25",
+    "notes": "Fix: every CMS update silently overwrote a site's .htaccess (and public/.htaccess) with the default version bundled in that release, discarding any custom redirects, security rules, or hosting-specific tweaks made since install. Both files are now preserved across updates, the same way .env already is.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-09-17"
+  },
+  {
     "version": "1.7.24",
     "notes": "New: Accessibility Widget — a floating accessibility button can now be enabled per site (Global Elements > Accessibility Tools) letting visitors adjust text size, contrast, grayscale, link highlighting, cursor size, line height, and motion, with their choices remembered for their next visit. Positioning, theme, and accent color are all configurable. Wording is deliberately \"Accessibility Tools,\" not an ADA-compliance claim, with a disclaimer built into both the admin page and the widget itself. New: baseline accessibility improvements site-wide, including a \"Skip to main content\" link, visible keyboard focus outlines, and properly linked form field labels for screen readers. Fix: the Dashboard's Recent Posts table and the All Blogs list showed a scheduled post's creation date instead of its actual publish date, even though the editor always showed the correct date. Both now show the publish date.",
     "download_url": "https://pagezy.io/cms-download.php",
