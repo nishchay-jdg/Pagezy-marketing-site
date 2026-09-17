@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.8.1",
+    "notes": "Fix: alt text set on an image in the Media Library never reached FlexiBuilder — picking or replacing an image always left Alt blank, forcing it to be retyped every time. It now carries over automatically, without ever overwriting alt text you've manually typed in the builder. New: a visible \"Replace Image\" button now appears at the top of the Settings panel whenever an image is selected in FlexiBuilder (Page Builder and Age Gate builder). Replacing an image previously required knowing to double-click or right-click it — this puts the same action somewhere it's actually easy to find.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-09-17"
+  },
+  {
     "version": "1.8.0",
     "notes": "New: Site Settings > General now has \"Force HTTPS\" and \"Force non-WWW\" toggles, enforced directly by the app instead of a hand-edited .htaccess rule. This was previously something site owners maintained manually in .htaccess, which meant it silently disappeared on every update. As real application settings, they ship with every release and can never be reset by an update again.",
     "download_url": "https://pagezy.io/cms-download.php",
