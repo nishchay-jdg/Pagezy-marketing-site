@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.8.3",
+    "notes": "Improved: post titles on the blog listing page are now wrapped in an H2 heading (list and grid layouts), giving the page proper heading structure for SEO and screen readers. The title link and its URL are unchanged, and the title looks the same as before.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-09-21"
+  },
+  {
     "version": "1.8.2",
     "notes": "New: Blog Settings > Blog Card Display now has a \"Sidebar (search, categories, tags)\" checkbox. Turn it off to remove the sidebar from the blog listing page; the posts then use the full width. On by default, so existing sites are unchanged.",
     "download_url": "https://pagezy.io/cms-download.php",
