@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.8.4",
+    "notes": "Fix: a redirect rule saved with a trailing slash on its source URL (e.g. \"/old-page/\" - exactly what you get pasting a URL from a browser address bar) could never match a real request and would silently 404 instead of redirecting. New and edited rules are now normalized correctly, and rules already saved with a trailing slash now work immediately without needing to be re-saved.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-10-05"
+  },
+  {
     "version": "1.8.3",
     "notes": "Improved: post titles on the blog listing page are now wrapped in an H2 heading (list and grid layouts), giving the page proper heading structure for SEO and screen readers. The title link and its URL are unchanged, and the title looks the same as before.",
     "download_url": "https://pagezy.io/cms-download.php",
