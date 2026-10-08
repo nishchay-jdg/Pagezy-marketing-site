@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.8.5",
+    "notes": "Fix: Create Backup Now failed with a server error unless a label was typed in, because the Label field is optional but was still being passed into a strictly-typed function. Backups now work correctly whether or not a label is entered.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-10-08"
+  },
+  {
     "version": "1.8.4",
     "notes": "Fix: a redirect rule saved with a trailing slash on its source URL (e.g. \"/old-page/\" - exactly what you get pasting a URL from a browser address bar) could never match a real request and would silently 404 instead of redirecting. New and edited rules are now normalized correctly, and rules already saved with a trailing slash now work immediately without needing to be re-saved.",
     "download_url": "https://pagezy.io/cms-download.php",
