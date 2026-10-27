@@ -1,5 +1,11 @@
 [
   {
+    "version": "1.8.6",
+    "notes": "Security: hardened the bug report screenshot/attachment upload pathway — uploaded files are now verified by their actual content rather than their claimed type before being saved, and the hub-forwarding integrity check is now always enforced. Improved: minor wording tweak to the admin dashboard welcome message.",
+    "download_url": "https://pagezy.io/cms-download.php",
+    "released_at": "2026-10-27"
+  },
+  {
     "version": "1.8.5",
     "notes": "Fix: Create Backup Now failed with a server error unless a label was typed in, because the Label field is optional but was still being passed into a strictly-typed function. Backups now work correctly whether or not a label is entered.",
     "download_url": "https://pagezy.io/cms-download.php",
